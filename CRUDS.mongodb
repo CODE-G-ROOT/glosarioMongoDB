@@ -1,0 +1,106 @@
+//GET DE CLIENTES
+use("db_campus_alquiler");
+db.cliente.aggregate([
+        {
+            $lookup: {
+                from: "reserva",
+                localField: "ID_Cliente",
+                foreignField: "ID_Cliente",
+                as: "reserva",
+            },
+        },
+        {
+            $unwind: "$reserva",
+        },
+        {
+            $lookup: {
+                from: "alquiler",
+                localField: "ID_Cliente",
+                foreignField: "ID_Cliente",
+                as: "alquiler",
+            },
+        },
+        {
+            $unwind: "$alquiler",
+        },
+        {
+            $group: {
+                _id: "$ID_Cliente",
+                Nombre: { $first: "$Nombre" },
+                Apellido: { $first: "$Apellido" },
+                DNI: { $first: "$DNI" },
+                Teléfono: { $first: "$Teléfono" },
+                alquiler: { $addToSet: "$alquiler" }, // Utiliza $addToSet para evitar documentos duplicados en el array
+                reserva: { $addToSet: "$reserva" }, // Utiliza $addToSet para evitar documentos duplicados en el array
+            },
+        },
+        {
+            $project: {
+                ID_Cliente: "$ID_Cliente",
+                Nombre: "$Nombre",
+                Apellido: "$Apellido",
+                DNI: "$DNI",
+                Teléfono: "$Teléfono",
+                alquiler: "$alquiler",
+                reserva: "$reserva",
+            },
+        },
+        {
+            $sort: { ID_Cliente: 1 },
+        },
+]).toArray();
+
+//GET EMPLEADOS
+use("db_campus_alquiler");
+db.empleado.aggregate([
+  {
+    $lookup: {
+      from: "registro_devolución",
+      localField: "ID_Empleado",
+      foreignField: "ID_Empleado",
+      as: "registro_devolución",
+    },
+  },
+  {
+    $unwind: "$registro_devolución",
+  },
+  {
+    $lookup: {
+      from: "registro_entrega",
+      localField: "ID_Empleado",
+      foreignField: "ID_Empleado",
+      as: "registro_entrega",
+    },
+  },
+  {
+    $unwind: "$registro_entrega",
+  },
+  {
+    $group: {
+      _id: "$ID_Empleado", // Corregir el nombre del campo para agrupar
+      Nombre: { $first: "$Nombre" },
+      Apellido: { $first: "$Apellido" },
+      DNI: { $first: "$DNI" },
+      Telefono: { $first: "$Telefono" },
+      Cargo: { $first: "$Cargo" },
+      registro_devolución: { $push: "$registro_devolución" }, // Utilizar $push para agrupar en un array
+      registro_entrega: { $push: "$registro_entrega" }, // Utilizar $push para agrupar en un array
+    },
+  },
+  {
+    $project: {
+      _id: 0, // Omitir el campo _id en el resultado final
+      ID_Empleado: "$_id", // Renombrar el campo _id a ID_Empleado
+      Nombre: 1,
+      Apellido: 1,
+      DNI: 1,
+      Telefono: 1,
+      Cargo: 1,
+      registro_devolución: 1,
+      registro_entrega: 1,
+    },
+  },
+]).toArray();
+
+use("db_campus_alquiler");
+db.empleado.find({}); 
