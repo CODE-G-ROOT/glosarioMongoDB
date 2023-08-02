@@ -58,5 +58,7 @@ db.empleado.aggregate([
 use("db_campus_alquiler");
 db.registro_devolución.find({});
 
-
+//GET Registro_entrega
+use("db_campus_alquiler");
+db.registro_entrega.find({});
 
