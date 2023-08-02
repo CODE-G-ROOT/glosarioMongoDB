@@ -62,3 +62,57 @@ db.registro_devolución.find({});
 use("db_campus_alquiler");
 db.registro_entrega.find({});
 
+//GET DE CLIENTES
+use("db_campus_alquiler");
+db.cliente.aggregate([
+    {
+        $lookup: {
+            from: "reserva",
+            localField: "ID_Cliente",
+            foreignField: "ID_Cliente",
+            as: "reserva",
+        },
+    },
+    {
+        $unwind: "$reserva",
+    },
+    {
+        $lookup: {
+            from: "alquiler",
+            localField: "ID_Cliente",
+            foreignField: "ID_Cliente",
+            as: "alquiler",
+        },
+    },
+    {
+        $unwind: "$alquiler",
+    },
+    {
+        $group: {
+            _id: "$ID_Cliente",
+            Nombre: { $first: "$Nombre" },
+            Apellido: { $first: "$Apellido" },
+            DNI: { $first: "$DNI" },
+            Teléfono: { $first: "$Teléfono" },
+            alquiler: { $addToSet: "$alquiler" }, // Utiliza $addToSet para evitar documentos duplicados en el array
+            reserva: { $addToSet: "$reserva" }, // Utiliza $addToSet para evitar documentos duplicados en el array
+        },
+    },
+    {
+        $project: {
+            ID_Cliente: "$ID_Cliente",
+            Nombre: "$Nombre",
+            Apellido: "$Apellido",
+            DNI: "$DNI",
+            Teléfono: "$Teléfono",
+            alquiler: "$alquiler",
+            reserva: "$reserva",
+        },
+    },
+    {
+        $sort: { ID_Cliente: 1 },
+    },
+]).toArray();
+
+
+
