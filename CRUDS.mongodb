@@ -124,6 +124,56 @@ db.automovil.aggregate([
     }
 ]).toArray();
 
+//TODO      Listar todos los alquileres activos junto con los datos de los clientes relacionados.
+use("db_campus_alquiler");
+db.alquiler.aggregate([
+    {
+        $lookup: {
+            from: "registro_entrega",
+            localField: "ID_Alquiler",
+            foreignField: "ID_Alquiler",
+            as: "registro_entrega",
+        }
+    },
+    {
+        $unwind: "$registro_entrega",
+    },
+    {
+        $match: {
+            Estado : "Activo"
+        }
+    },
+    {
+        $group: {
+            _id: "$ID_Alquiler",
+            ID_Cliente: { $first: "$ID_Cliente" },
+            ID_Automovil: { $first: "$ID_Automovil" },
+            Fecha_Inicio: { $first: "$Fecha_Inicio" },
+            Fecha_Fin: { $first: "$Fecha_Fin" },
+            Teléfono: { $first: "$Teléfono" },
+            Estado: { $first: "$Estado" },
+            registro_entrega: { $addToSet: "$registro_entrega" }, // Utilizar $push para agrupar en un array
+        }
+    },
+    {
+        $project: {
+            ID_Cliente: "$ID_Cliente",
+            ID_Automovil: "$ID_Automovil",
+            Fecha_Inicio: "$Fecha_Inicio",
+            Fecha_Fin: "$Fecha_Fin",
+            Teléfono: "$Teléfono",
+            Estado: "$Estado",
+            registro_entrega: "$registro_entrega",
+        }
+    },
+    {
+        $sort: {
+            ID_Alquiler : 1
+        }
+    }
+]).toArray();
+
+
 //GET EMPLEADOS
 use("db_campus_alquiler");
 db.empleado.aggregate([

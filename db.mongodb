@@ -8,7 +8,7 @@ db.alquiler.insertMany([
         "Fecha_Inicio": 20230701,
         "Fecha_Fin": 20230731,
         "Teléfono": "No hay chamba",
-        "Estado": "Con deudas"
+        "Estado": "Activo"
     },
     {
         "ID_Alquiler": 2,
@@ -35,7 +35,7 @@ db.alquiler.insertMany([
         "Fecha_Inicio": 20230715,
         "Fecha_Fin": 20230725,
         "Teléfono": "456789321",
-        "Estado": "Con deudas"
+        "Estado": "Activo"
     }
 ]);
 
