@@ -193,3 +193,40 @@ db.automovil.aggregate([
 use("db_campus_alquiler");
 db.sucursal_automovil.find({});
 
+//GET Sucursal
+use("db_campus_alquiler");
+db.sucursal.aggregate([
+    {
+        $lookup: {
+            from: "sucursal_automovil",
+            localField: "ID_Sucursal",
+            foreignField: "ID_Sucursal",
+            as: "sucursal_automovil"
+        }
+    },
+    {
+        $unwind: "$sucursal_automovil",
+    },
+    {
+        $group: {
+            _id: "$ID_Automovil",
+            Nombre: { $first: "$Nombre" },
+            Dirección: { $first: "$Dirección"},
+            Teléfono: { $first: "$Teléfono"},
+            sucursal_automovil : { $addToSet : "$sucursal_automovil" }
+        }
+    },
+    {
+        $project: {
+            ID_Automovil : "$ID_Automovil",
+            _id: "$ID_Automovil",
+            Nombre: "$Nombre",
+            Dirección: "$Dirección",
+            Teléfono: "$Teléfono",
+            sucursal_automovil : "$sucursal_automovil"
+        },
+    },
+    {
+        $sort: { ID_Automovil: 1 },
+    }
+]).toArray();
