@@ -114,5 +114,8 @@ db.cliente.aggregate([
     },
 ]).toArray();
 
+//GET Reservas
+use("db_campus_alquiler");
+db.reserva.find({});
 
 
