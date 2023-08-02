@@ -234,6 +234,7 @@ db.sucursal.aggregate([
     }
 ]).toArray();
 
+// PUNTO 6: Obtener los detalles del alquiler con el ID_Alquiler específico.
 use("db_campus_alquiler");
 db.alquiler.aggregate([
     {
@@ -269,6 +270,11 @@ db.alquiler.aggregate([
             Teléfono: "$Teléfono",
             Estado: "$Estado",
             registro_entrega: "$registro_entrega",
+        }
+    },
+    {
+        $sort: {
+            ID_Alquiler : 1
         }
     }
 ]).toArray();

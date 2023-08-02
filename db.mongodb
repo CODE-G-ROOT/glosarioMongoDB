@@ -226,7 +226,7 @@ db.createCollection("registro_entrega");
 db.registro_entrega.insertMany([
     {
         "ID_Registro": 1,
-        "ID_Alquiler": 600000,
+        "ID_Alquiler": 1,
         "ID_Empleado": 1,
         "Fecha_Entregado": 20230731,
         "Combustible_Entregado": 50.25,
@@ -234,7 +234,7 @@ db.registro_entrega.insertMany([
     },
     {
         "ID_Registro": 2,
-        "ID_Alquiler": 601000,
+        "ID_Alquiler": 2,
         "ID_Empleado": 2,
         "Fecha_Entregado": 20230730,
         "Combustible_Entregado": 40.5,
@@ -242,7 +242,7 @@ db.registro_entrega.insertMany([
     },
     {
         "ID_Registro": 3,
-        "ID_Alquiler": 602000,
+        "ID_Alquiler": 3,
         "ID_Empleado": 3,
         "Fecha_Entregado": 20230729,
         "Combustible_Entregado": 60.75,
@@ -250,7 +250,7 @@ db.registro_entrega.insertMany([
     },
     {
         "ID_Registro": 4,
-        "ID_Alquiler": 603000,
+        "ID_Alquiler": 4,
         "ID_Empleado": 4,
         "Fecha_Entregado": 20230728,
         "Combustible_Entregado": 45,
@@ -327,6 +327,7 @@ db.sucursal.insertMany([
         "Teléfono": "147258369"
     }
 ]);
+
 use("db_campus_alquiler");
 db.createCollection("sucursal_automovil");
 db.sucursal_automovil.insertMany([
