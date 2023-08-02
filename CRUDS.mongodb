@@ -1,3 +1,129 @@
+//TODO      Mostrar todos los clientes registrados en la base de datos.
+use("db_campus_alquiler");
+db.cliente.aggregate([
+    {
+        $lookup: {
+            from: "reserva",
+            localField: "ID_Cliente",
+            foreignField: "ID_Cliente",
+            as: "reserva",
+        },
+    },
+    {
+        $unwind: "$reserva",
+    },
+    {
+        $lookup: {
+            from: "alquiler",
+            localField: "ID_Cliente",
+            foreignField: "ID_Cliente",
+            as: "alquiler",
+        },
+    },
+    {
+        $unwind: "$alquiler",
+    },
+    {
+        $group: {
+            _id: "$ID_Cliente",
+            Nombre: { $first: "$Nombre" },
+            Apellido: { $first: "$Apellido" },
+            DNI: { $first: "$DNI" },
+            Teléfono: { $first: "$Teléfono" },
+            alquiler: { $addToSet: "$alquiler" }, // Utiliza $addToSet para evitar documentos duplicados en el array
+            reserva: { $addToSet: "$reserva" }, // Utiliza $addToSet para evitar documentos duplicados en el array
+        },
+    },
+    {
+        $project: {
+            ID_Cliente: "$ID_Cliente",
+            Nombre: "$Nombre",
+            Apellido: "$Apellido",
+            DNI: "$DNI",
+            Teléfono: "$Teléfono",
+            alquiler: "$alquiler",
+            reserva: "$reserva",
+        },
+    },
+    {
+        $sort: { ID_Cliente: 1 },
+    },
+]).toArray();
+
+//TODO      Obtener todos los automóviles disponibles para alquiler.
+use("db_campus_alquiler");
+db.automovil.aggregate([
+    {
+        $lookup: {
+            from: "sucursal_automovil",
+            localField: "ID_Automovil",
+            foreignField: "ID_Automovil",
+            as: "sucursal_automovil"
+        }
+    },
+    {
+        $unwind: "$sucursal_automovil",
+    },
+    {
+        $lookup: {
+            from: "reserva",
+            localField: "ID_Automovil",
+            foreignField: "ID_Automovil",
+            as: "reserva"
+        }
+    },
+    {
+        $unwind: "$reserva",
+    },
+    {
+        $lookup: {
+            from: "alquiler",
+            localField: "ID_Automovil",
+            foreignField: "ID_Automovil",
+            as: "alquiler"
+        }
+    },
+    {
+        $unwind: "$alquiler",
+    },
+    {
+        $match: {
+            "alquiler.Estado": "Disponible"
+        }
+    },
+    {
+        $group: {
+            _id: "$ID_Automovil",
+            Marca: { $first: "$Nombre" },
+            Modelo: { $first: "$Modelo" },
+            Año: { $first: "$Año" },
+            Tipo: { $first: "$Tipo" },
+            Capacidad: { $first: "$Capacidad" },
+            Precio_Diario: { $first: "$Precio_Diario" },
+            sucursal_automovil: { $addToSet: "$sucursal_automovil" },
+            reserva: { $addToSet: "$reserva" },
+            alquiler: { $addToSet: "$alquiler" },
+        }
+    },
+    {
+        $project: {
+            // ID_Cliente: "$ID_Cliente",
+            // Marca: "$_id",
+            Modelo: "$Modelo",
+            Año: "$Año",
+            Tipo: "$Tipo",
+            Capacidad: "$Capacidad",
+            Precio_Diario: "$Precio_Diario",
+            sucursal_automovil: "$sucursal_automovil",
+            reserva: "$reserva",
+            alquiler: "$alquiler"
+        },
+    },
+    {
+        $sort: { _id: 1 }
+    }
+]).toArray();
+
 //GET EMPLEADOS
 use("db_campus_alquiler");
 db.empleado.aggregate([
@@ -62,135 +188,13 @@ db.registro_devolución.find({});
 use("db_campus_alquiler");
 db.registro_entrega.find({});
 
-//GET DE CLIENTES
-use("db_campus_alquiler");
-db.cliente.aggregate([
-    {
-        $lookup: {
-            from: "reserva",
-            localField: "ID_Cliente",
-            foreignField: "ID_Cliente",
-            as: "reserva",
-        },
-    },
-    {
-        $unwind: "$reserva",
-    },
-    {
-        $lookup: {
-            from: "alquiler",
-            localField: "ID_Cliente",
-            foreignField: "ID_Cliente",
-            as: "alquiler",
-        },
-    },
-    {
-        $unwind: "$alquiler",
-    },
-    {
-        $group: {
-            _id: "$ID_Cliente",
-            Nombre: { $first: "$Nombre" },
-            Apellido: { $first: "$Apellido" },
-            DNI: { $first: "$DNI" },
-            Teléfono: { $first: "$Teléfono" },
-            alquiler: { $addToSet: "$alquiler" }, // Utiliza $addToSet para evitar documentos duplicados en el array
-            reserva: { $addToSet: "$reserva" }, // Utiliza $addToSet para evitar documentos duplicados en el array
-        },
-    },
-    {
-        $project: {
-            ID_Cliente: "$ID_Cliente",
-            Nombre: "$Nombre",
-            Apellido: "$Apellido",
-            DNI: "$DNI",
-            Teléfono: "$Teléfono",
-            alquiler: "$alquiler",
-            reserva: "$reserva",
-        },
-    },
-    {
-        $sort: { ID_Cliente: 1 },
-    },
-]).toArray();
+
 
 //GET Reservas
 use("db_campus_alquiler");
 db.reserva.find({});
 
-//GET Automovil
-use("db_campus_alquiler");
-db.automovil.aggregate([
-    {
-        $lookup: {
-            from: "sucursal_automovil",
-            localField: "ID_Automovil",
-            foreignField: "ID_Automovil",
-            as: "sucursal_automovil"
-        }
-    },
-    {
-        $unwind: "$sucursal_automovil",
-    },
-    {
-        $lookup: {
-            from: "reserva",
-            localField: "ID_Automovil",
-            foreignField: "ID_Automovil",
-            as: "reserva"
-        }
-    },
-    {
-        $unwind: "$reserva",
-    },
-    {
-        $lookup: {
-            from: "alquiler",
-            localField: "ID_Automovil",
-            foreignField: "ID_Automovil",
-            as: "alquiler"
-        }
-    },
-    {
-        $unwind: "$alquiler",
-    },
-    {
-        $match: {
-            "alquiler.Estado": "Pagado"
-        }
-    },
-    {
-        $group: {
-            _id: "$ID_Automovil",
-            Marca: { $first: "$Nombre" },
-            Modelo: { $first: "$Modelo" },
-            Año: { $first: "$Año" },
-            Tipo: { $first: "$Tipo" },
-            Capacidad: { $first: "$Capacidad" },
-            Precio_Diario: { $first: "$Precio_Diario" },
-            sucursal_automovil: { $addToSet: "$sucursal_automovil" },
-            reserva: { $addToSet: "$reserva" },
-            alquiler: { $addToSet: "$alquiler" },
-        }
-    },
-    {
-        $project: {
-            // ID_Cliente: "$ID_Cliente",
-            // Marca: "$_id",
-            Modelo: "$Modelo",
-            Año: "$Año",
-            Tipo: "$Tipo",
-            Capacidad: "$Capacidad",
-            Precio_Diario: "$Precio_Diario",
-            sucursal_automovil: "$sucursal_automovil",
-            reserva: "$reserva",
-            alquiler: "$alquiler"
-        },
-    },
-    {
-        $sort: { _id: 1 }
-    }
-]).toArray();
+
 
 //GET Sucursal Automovil
 use("db_campus_alquiler");
@@ -262,7 +266,6 @@ db.alquiler.aggregate([
     },
     {
         $project: {
-            ID_Alquiler: "$_id",
             ID_Cliente: "$ID_Cliente",
             ID_Automovil: "$ID_Automovil",
             Fecha_Inicio: "$Fecha_Inicio",

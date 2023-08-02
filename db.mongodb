@@ -17,7 +17,7 @@ db.alquiler.insertMany([
         "Fecha_Inicio": 20230801,
         "Fecha_Fin": 20230815,
         "Teléfono": "789654123",
-        "Estado": "Pagado"
+        "Estado": "Disponible"
     },
     {
         "ID_Alquiler": 3,
@@ -26,7 +26,7 @@ db.alquiler.insertMany([
         "Fecha_Inicio": 20230901,
         "Fecha_Fin": 20230930,
         "Teléfono": "321987654",
-        "Estado": "Pagado"
+        "Estado": "Disponible"
     },
     {
         "ID_Alquiler": 4,
@@ -277,7 +277,7 @@ db.reserva.insertMany([
         "Fecha_Reserva": 20230515,
         "Fecha_Inicio": 20230801,
         "Fecha_Fin": 20230815,
-        "Estado": "Pagado"
+        "Estado": "Disponible"
     },
     {
         "ID_Reserva": 3,
@@ -286,7 +286,7 @@ db.reserva.insertMany([
         "Fecha_Reserva": 20230720,
         "Fecha_Inicio": 20230901,
         "Fecha_Fin": 20230930,
-        "Estado": "Pagado"
+        "Estado": "Disponible"
     },
     {
         "ID_Reserva": 4,
