@@ -118,4 +118,74 @@ db.cliente.aggregate([
 use("db_campus_alquiler");
 db.reserva.find({});
 
+//GET Automovil
+use("db_campus_alquiler")
+db.automovil.aggregate([
+    {
+        $lookup: {
+            from: "sucursal_automovil",
+            localField: "ID_Automovil",
+            foreignField: "ID_Automovil",
+            as: "sucursal_automovil"
+        }
+    },
+    {
+        $unwind: "$sucursal_automovil",
+    },
+    {
+        $lookup: {
+            from: "reserva",
+            localField: "ID_Automovil",
+            foreignField: "ID_Automovil",
+            as: "reserva"
+        }
+    },
+    {
+        $unwind: "$reserva",
+    },
+    {
+        $lookup: {
+            from: "alquiler",
+            localField: "ID_Automovil",
+            foreignField: "ID_Automovil",
+            as: "alquiler"
+        }
+    },
+    {
+        $unwind: "$alquiler",
+    },
+    {
+        $group: {
+            _id: "$ID_Automovil",
+            Marca: { $first: "$Nombre" },
+            Modelo: { $first: "$Modelo"},
+            Año: { $first: "$Año"},
+            Tipo: { $first: "$Tipo"},
+            Capacidad: { $first: "$Capacidad"},
+            Precio_Diario: { $first: "$Precio_Diario"},
+            sucursal_automovil: { $addToSet: "$sucursal_automovil"},
+            reserva: { $addToSet: "$reserva"},
+            alquiler: { $addToSet: "$alquiler"},
+        }
+    },
+    {
+        $project: {
+            // ID_Cliente: "$ID_Cliente",
+            Marca: "$_id",
+            Modelo: "$Modelo",
+            Año: "$Año",
+            Tipo: "$Tipo",
+            Capacidad: "$Capacidad",
+            Precio_Diario: "$Precio_Diario",
+            sucursal_automovil : "$sucursal_automovil",
+            reserva : "$reserva",
+            alquiler : "$alquiler"
+        },
+    },
+    {
+        $sort: {
+            _id: 1
+        }
+    }
+]);
 
