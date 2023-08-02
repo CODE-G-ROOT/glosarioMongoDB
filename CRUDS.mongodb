@@ -133,15 +133,48 @@ db.alquiler.aggregate([
             localField: "ID_Alquiler",
             foreignField: "ID_Alquiler",
             as: "registro_entrega",
-        }
+        },
     },
     {
         $unwind: "$registro_entrega",
     },
     {
+        $lookup: {
+            from: "automovil",
+            localField: "ID_Automovil",
+            foreignField: "ID_Automovil",
+            as: "automovil",
+        },
+    },
+    {
+        $unwind: "$automovil",
+    },
+    {
+        $lookup: {
+            from: "cliente",
+            localField: "ID_Cliente",
+            foreignField: "ID_Cliente",
+            as: "cliente",
+        },
+    },
+    {
+        $unwind: "$cliente",
+    },
+    {
+        $lookup: {
+            from: "empleado",
+            localField: "registro_entrega.ID_Empleado",
+            foreignField: "ID_Empleado",
+            as: "empleado",
+        },
+    },
+    {
+        $unwind: "$empleado",
+    },
+    {
         $match: {
-            Estado : "Activo"
-        }
+            Estado: "Activo",
+        },
     },
     {
         $group: {
@@ -152,26 +185,39 @@ db.alquiler.aggregate([
             Fecha_Fin: { $first: "$Fecha_Fin" },
             Teléfono: { $first: "$Teléfono" },
             Estado: { $first: "$Estado" },
-            registro_entrega: { $addToSet: "$registro_entrega" }, // Utilizar $push para agrupar en un array
-        }
+            registro_entrega: { $addToSet: "$registro_entrega" },
+            automovil: { $addToSet: "$automovil" },
+            cliente: { $addToSet: "$cliente" },
+            empleado: { $addToSet: "$empleado" },
+        },
     },
     {
         $project: {
-            ID_Cliente: "$ID_Cliente",
-            ID_Automovil: "$ID_Automovil",
-            Fecha_Inicio: "$Fecha_Inicio",
-            Fecha_Fin: "$Fecha_Fin",
-            Teléfono: "$Teléfono",
-            Estado: "$Estado",
-            registro_entrega: "$registro_entrega",
-        }
+            ID_Cliente: 1,
+            ID_Automovil: 1,
+            Fecha_Inicio: 1,
+            Fecha_Fin: 1,
+            Teléfono: 1,
+            Estado: 1,
+            registro_entrega: 1,
+            automovil: 1,
+            cliente: 1,
+            empleado: {
+                ID_Empleado : 1,
+                Nombre : 1,
+                Apellido : 1,
+                Telefono : 1,
+                Cargo : 1,
+            },
+        },
     },
     {
         $sort: {
-            ID_Alquiler : 1
-        }
-    }
-]).toArray();
+            ID_Alquiler: 1,
+        },
+    },
+]);
+
 
 
 //GET EMPLEADOS
@@ -327,7 +373,7 @@ db.alquiler.aggregate([
     },
     {
         $sort: {
-            ID_Alquiler : 1
+            ID_Alquiler: 1
         }
     }
 ]).toArray();
