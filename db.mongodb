@@ -43,13 +43,13 @@ use("db_campus_alquiler");
 db.createCollection("automovil");
 db.automovil.insertMany([
     {
-        "ID_Alquiler": 1,
-        "ID_Cliente": 1,
         "ID_Automovil": 1,
-        "Fecha_Inicio": 20230701,
-        "Fecha_Fin": 20230731,
-        "Teléfono": "No hay chamba",
-        "Estado": "Con deudas"
+        "Marca": "Honda",
+        "Modelo": "Civic",
+        "Año": 2023,
+        "Tipo": "carro",
+        "Capacidad": 4,
+        "Precio_Diario": 160000
     },
     {
         "ID_Automovil": 2,

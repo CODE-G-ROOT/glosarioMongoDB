@@ -1,4 +1,4 @@
-//TODO      Mostrar todos los clientes registrados en la base de datos.
+//TODO     Mostrar todos los clientes registrados en la base de datos.
 use("db_campus_alquiler");
 db.cliente.aggregate([
     {
@@ -124,31 +124,9 @@ db.automovil.aggregate([
     }
 ]).toArray();
 
-//TODO      Listar todos los alquileres activos junto con los datos de los clientes relacionados.
+//TODO      Mostrar todas las reservas pendientes con los datos del cliente y el automóvil reservado.
 use("db_campus_alquiler");
-db.alquiler.aggregate([
-    {
-        $lookup: {
-            from: "registro_entrega",
-            localField: "ID_Alquiler",
-            foreignField: "ID_Alquiler",
-            as: "registro_entrega",
-        },
-    },
-    {
-        $unwind: "$registro_entrega",
-    },
-    {
-        $lookup: {
-            from: "automovil",
-            localField: "ID_Automovil",
-            foreignField: "ID_Automovil",
-            as: "automovil",
-        },
-    },
-    {
-        $unwind: "$automovil",
-    },
+db.reserva.aggregate([
     {
         $lookup: {
             from: "cliente",
@@ -162,135 +140,53 @@ db.alquiler.aggregate([
     },
     {
         $lookup: {
-            from: "empleado",
-            localField: "registro_entrega.ID_Empleado",
-            foreignField: "ID_Empleado",
-            as: "empleado",
+            from: "automovil",
+            localField: "ID_Automovil",
+            foreignField: "ID_Automovil",
+            as: "automovil",
         },
     },
     {
-        $unwind: "$empleado",
+        $unwind: "$automovil",
     },
     {
-        $match: {
-            Estado: "Activo",
-        },
+        $match: { Estado : "pendiente" }
     },
     {
         $group: {
-            _id: "$ID_Alquiler",
-            ID_Cliente: { $first: "$ID_Cliente" },
-            ID_Automovil: { $first: "$ID_Automovil" },
-            Fecha_Inicio: { $first: "$Fecha_Inicio" },
-            Fecha_Fin: { $first: "$Fecha_Fin" },
-            Teléfono: { $first: "$Teléfono" },
-            Estado: { $first: "$Estado" },
-            registro_entrega: { $addToSet: "$registro_entrega" },
-            automovil: { $addToSet: "$automovil" },
-            cliente: { $addToSet: "$cliente" },
-            empleado: { $addToSet: "$empleado" },
-        },
-    },
-    {
-        $project: {
-            ID_Cliente: 1,
-            ID_Automovil: 1,
-            Fecha_Inicio: 1,
-            Fecha_Fin: 1,
-            Teléfono: 1,
-            Estado: 1,
-            registro_entrega: 1,
-            automovil: 1,
-            cliente: 1,
-            empleado: {
-                ID_Empleado : 1,
-                Nombre : 1,
-                Apellido : 1,
-                Telefono : 1,
-                Cargo : 1,
-            },
-        },
-    },
-    {
-        $sort: {
-            ID_Alquiler: 1,
-        },
-    },
-]);
-
-
-
-//GET EMPLEADOS
-use("db_campus_alquiler");
-db.empleado.aggregate([
-    {
-        $lookup: {
-            from: "registro_devolución",
-            localField: "ID_Empleado",
-            foreignField: "ID_Empleado",
-            as: "registro_devolución",
-        },
-    },
-    {
-        $unwind: "$registro_devolución",
-    },
-    {
-        $lookup: {
-            from: "registro_entrega",
-            localField: "ID_Empleado",
-            foreignField: "ID_Empleado",
-            as: "registro_entrega",
-        },
-    },
-    {
-        $unwind: "$registro_entrega",
-    },
-    {
-        $group: {
-            _id: "$ID_Empleado", // Corregir el nombre del campo para agrupar
-            Nombre: { $first: "$Nombre" },
-            Apellido: { $first: "$Apellido" },
-            DNI: { $first: "$DNI" },
-            Telefono: { $first: "$Telefono" },
-            Cargo: { $first: "$Cargo" },
-            registro_devolución: { $addToSet: "$registro_devolución" }, // Utilizar $push para agrupar en un array
-            registro_entrega: { $addToSet: "$registro_entrega" }, // Utilizar $push para agrupar en un array
-        },
-    },
-    {
-        $project: {
-            Nombre: "$Nombre",
-            Apellido: "$Apellido",
-            DNI: "$DNI",
-            Telefono: "$Telefono",
-            Cargo: "$Cargo",
-            registro_devolución: "$registro_devolución",
-            registro_entrega: "$registro_entrega",
-        },
-    },
-    {
-        $sort: {
-            _id: 1,
-            ID_Empleado: 1
+            _id : "$ID_Reserva",
+            ID_Cliente : { $addToSet : "$cliente" },
+            ID_Automovil : { $addToSet : "$automovil" },
+            Fecha_Reserva : { $first : "$Fecha_Reserva" },
+            Fecha_Inicio : { $first : "$Fecha_Inicio" },
+            Fecha_Fin : { $first : "$Fecha_Fin" },
+            Estado : { $first : "$Estado" },
         }
+    },
+    {
+        $project: {
+            _id : 1,
+            ID_Cliente : 1,
+            ID_Automovil : 1,
+            Fecha_Reserva : 1,
+            Fecha_Inicio : 1,
+            Fecha_Fin : 1,
+            Estado : 1,
+        }
+    },
+    {
+        $sort: { _id : 1 }
     }
-]);
 
-//GET Registro Devolución
-use("db_campus_alquiler");
-db.registro_devolución.find({});
+]);
 
 //GET Registro_entrega
 use("db_campus_alquiler");
 db.registro_entrega.find({});
 
-
-
 //GET Reservas
 use("db_campus_alquiler");
 db.reserva.find({});
-
-
 
 //GET Sucursal Automovil
 use("db_campus_alquiler");
