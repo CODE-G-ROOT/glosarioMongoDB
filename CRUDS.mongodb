@@ -567,3 +567,8 @@ db.sucursal.aggregate([
 //TODO     Obtener la cantidad total de alquileres registrados en la base de datos.
 use("db_campus_alquiler");
 db.alquiler.find({});
+
+//TODO     Mostrar los automóviles con capacidad igual a 5 personas y que estén disponibles.
+//! CORREGIR LA DATA YA QUE NO HAY AUTOS CON CAPACIDAD DE 5 PERSONAS
+use("db_campus_alquiler");
+db.automovil.find({ Capacidad : 4 });
