@@ -281,6 +281,10 @@ db.alquiler.aggregate([
     },
 ]);
 
+//TODO      Listar los empleados con el cargo de "Vendedor"
+use("db_campus_alquiler");
+db.empleado.find({ Cargo : "Vendedor"});
+
 //GET Registro Devolución
 use("db_campus_alquiler");
 db.registro_devolución.find({});
