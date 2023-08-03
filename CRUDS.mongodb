@@ -438,9 +438,9 @@ db.alquiler.find({
     }
 });
 
-//GET Reservas
+//TODO      Listar las reservas pendientes realizadas por un cliente específico
 use("db_campus_alquiler");
-db.reserva.find({});
+db.cliente.find({});
 
 //GET Sucursal Automovil
 use("db_campus_alquiler");
