@@ -451,41 +451,58 @@ db.empleado.find(
     ]}
 );
 
-//GET Sucursal
+//TODO     Obtener los datos de los clientes que realizaron al menos un alquiler
 use("db_campus_alquiler");
-db.sucursal.aggregate([
+db.cliente.aggregate([
     {
         $lookup: {
-            from: "sucursal_automovil",
-            localField: "ID_Sucursal",
-            foreignField: "ID_Sucursal",
-            as: "sucursal_automovil"
+            from: "alquiler",
+            localField: "ID_Cliente",
+            foreignField: "ID_Cliente",
+            as: "alquiler"
         }
     },
     {
-        $unwind: "$sucursal_automovil",
+        $unwind: "$alquiler",
+    },
+    {
+        $lookup: {
+            from: "automovil",
+            localField: "automovil.ID_Automovil",
+            foreignField: "alquiler.ID_Automovil",
+            as: "automovil"
+        }
+    },
+    {
+        $unwind: "$automovil",
     },
     {
         $group: {
-            _id: "$ID_Automovil",
-            Nombre: { $first: "$Nombre" },
-            Dirección: { $first: "$Dirección" },
-            Teléfono: { $first: "$Teléfono" },
-            sucursal_automovil: { $addToSet: "$sucursal_automovil" }
+            _id : "$ID_Cliente",
+            Nombre : { $first : "$Nombre" },
+            Apellido : { $first : "$Apellido" },
+            DNI : { $first : "$DNI" },
+            Dirección : { $first : "$Dirección" },
+            Teléfono : { $first : "$Teléfono" },
+            Email : { $first : "$Email" },
+            alquiler : {$addToSet : "$alquiler" },
+            automovil : {$addToSet : "$automovil" },
         }
     },
     {
         $project: {
-            ID_Automovil: "$ID_Automovil",
-            _id: "$ID_Automovil",
-            Nombre: "$Nombre",
-            Dirección: "$Dirección",
-            Teléfono: "$Teléfono",
-            sucursal_automovil: "$sucursal_automovil"
+            Nombre : 1,
+            Apellido : 1,
+            DNI : 1,
+            Dirección : 1,
+            Teléfono : 1,
+            Email : 1,
+            alquiler : 1,
+            automovil : 1,
         },
     },
     {
-        $sort: { ID_Automovil: 1 },
+        $sort: { _id : 1 }
     }
 ]).toArray();
 
@@ -528,7 +545,7 @@ db.alquiler.aggregate([
     },
     {
         $sort: {
-            ID_Alquiler: 1
+            _id: 1
         }
     }
 ]).toArray();
