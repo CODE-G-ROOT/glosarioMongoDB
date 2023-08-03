@@ -423,9 +423,12 @@ db.cliente.aggregate([
     },
 ]).toArray();
 
-//GET Registro Devolución
+//TODO      Mostrar todos los automóviles con una capacidad mayor a 5 personas
 use("db_campus_alquiler");
-db.registro_devolución.find({});
+db.automovil.find({
+    Capacidad : {
+        $gte : 4
+} })
 
 //GET Registro_entrega
 use("db_campus_alquiler");
