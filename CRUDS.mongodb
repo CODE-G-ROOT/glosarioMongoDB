@@ -572,3 +572,14 @@ db.alquiler.find({});
 //! CORREGIR LA DATA YA QUE NO HAY AUTOS CON CAPACIDAD DE 5 PERSONAS
 use("db_campus_alquiler");
 db.automovil.find({ Capacidad : 4 });
+
+//TODO     Listar los alquileres con fecha de inicio entre '2023-07-05' y '2023-07-10'.
+//! CORREGIR LA DATA YA QUE NO HAY FECHAS QUE INICIEN EN '2023-07-05' Y TERMINEN EN '2023-07-10'
+use("db_campus_alquiler");
+db.alquiler.find({
+    Fecha_Inicio : {
+        $gte : 20230701,
+        $lte : 20230815,
+    }
+});
+
