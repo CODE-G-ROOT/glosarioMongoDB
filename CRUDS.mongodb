@@ -335,6 +335,94 @@ db.sucursal.aggregate([
     }
 ]);
 
+//TODO      Obtener el costo total de un alquiler específico.
+use("db_campus_alquiler");
+db.alquiler.aggregate([
+    {
+        $lookup: {
+            from: "registro_entrega",
+            localField: "ID_Alquiler",
+            foreignField: "ID_Alquiler",
+            as: "registro_entrega",
+        },
+    },
+    {
+        $unwind: "$registro_entrega",
+    },
+    {
+        $lookup: {
+            from: "automovil",
+            localField: "ID_Automovil",
+            foreignField: "ID_Automovil",
+            as: "automovil",
+        },
+    },
+    {
+        $unwind: "$automovil",
+    },
+    {
+        $lookup: {
+            from: "cliente",
+            localField: "ID_Cliente",
+            foreignField: "ID_Cliente",
+            as: "cliente",
+        },
+    },
+    {
+        $unwind: "$cliente",
+    },
+    {
+        $lookup: {
+            from: "empleado",
+            localField: "registro_entrega.ID_Empleado",
+            foreignField: "ID_Empleado",
+            as: "empleado",
+        },
+    },
+    {
+        $unwind: "$empleado",
+    },
+    {
+        $group: {
+            _id: "$ID_Alquiler",
+            ID_Cliente: { $first: "$ID_Cliente" },
+            ID_Automovil: { $first: "$ID_Automovil" },
+            Fecha_Inicio: { $first: "$Fecha_Inicio" },
+            Fecha_Fin: { $first: "$Fecha_Fin" },
+            Teléfono: { $first: "$Teléfono" },
+            Estado: { $first: "$Estado" },
+            automovil: { $addToSet: "$automovil" },
+            cliente: { $addToSet: "$cliente" },
+            empleado: { $addToSet: "$empleado" },
+        },
+    },
+    {
+        $project: {
+            ID_Cliente: 1,
+            ID_Automovil: 1,
+            Fecha_Inicio: 1,
+            Fecha_Fin: 1,
+            Teléfono: 1,
+            Estado: 1,
+            automovil: 1,
+            cliente: 1,
+            empleado: {
+                _id : 1,
+                ID_Empleado : 1,
+                Nombre : 1,
+                Apellido : 1,
+                Telefono : 1,
+                Cargo : 1,
+            },
+        },
+    },
+    {
+        $sort: {
+            ID_Alquiler: 1,
+        },
+    },
+]);
+
 //GET Registro Devolución
 use("db_campus_alquiler");
 db.registro_devolución.find({});
