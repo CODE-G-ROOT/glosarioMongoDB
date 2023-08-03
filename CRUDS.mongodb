@@ -515,11 +515,54 @@ db.automovil.find({
     ]
 });
 
-// PUNTO 6: Obtener los detalles del alquiler con el ID_Alquiler específico.
+//TODO     Mostrar la cantidad total de automóviles en cada sucursal junto con su dirección.
 use("db_campus_alquiler");
-db.automovil.find({
-    $and : {
-
+db.sucursal.aggregate([
+    {
+        $lookup: {
+            from: "sucursal_automovil",
+            localField: "ID_Sucursal",
+            foreignField: "ID_Sucursal",
+            as: "sucursal_automovil"
+        }
+    },
+    {
+        $unwind: "$sucursal_automovil",
+    },
+    {
+        $lookup: {
+            from: "automovil",
+            localField: "ID_Automovil",
+            foreignField: "sucursal_automovil.ID_Automovil",
+            as: "automovil"
+        }
+    },
+    {
+        $unwind: "$automovil",
+    },
+    {
+        $group: {
+            _id : "ID_Sucursal",
+            Nombre : { $first : "$Nombre" },
+            Dirección : { $first : "$Dirección" },
+            Teléfono : { $first : "$Teléfono" },
+            sucursal_automovil : { $addToSet : "$sucursal_automovil" },
+            automovil : { $addToSet : "$automovil" },
+        }
+    },
+    {
+        $project: {
+            Nombre : "$Nombre",
+            Dirección : "$Dirección",
+            Teléfono : "$Teléfono",
+            sucursal_automovil : "$sucursal_automovil",
+            automovil : "$automovil",
+        }
+    },
+    {
+        $sort: { _id : 1 }
     }
-}).toArray();
+]);
 
+use("db_campus_alquiler");
+db.sucursal.find({});
