@@ -442,9 +442,14 @@ db.alquiler.find({
 use("db_campus_alquiler");
 db.cliente.find({});
 
-//GET Sucursal Automovil
+//TODO     Mostrar los empleados con cargo de "Gerente" o "Asistente"
 use("db_campus_alquiler");
-db.sucursal_automovil.find({});
+db.empleado.find(
+    { $or : [
+        { Cargo : "Gerente" },
+        { Cargo : "Asistente" }
+    ]}
+);
 
 //GET Sucursal
 use("db_campus_alquiler");
