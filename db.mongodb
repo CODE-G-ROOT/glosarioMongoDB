@@ -1,47 +1,52 @@
 use("db_campus_alquiler");
 db.createCollection("alquiler",{
     capped : true,
-    size : 900,
+    size : 650,
     max : 5,
     validator : {
         $jsonSchema : {
             bsonType: "object",
-            required : [ "ID_Alquiler", "ID_Cliente", "ID_Automovil", "Fecha_Inicio", "Fecha_Fin", "Teléfono", "Estado"],
+            required : [ 
+                "ID_Alquiler",
+                "ID_Cliente",
+                "ID_Automovil",
+                "Fecha_Inicio",
+                "Fecha_Fin",
+                "Teléfono",
+                "Estado",
+            ],
             properties: {
                 ID_Alquiler : {
-                    bsonType: "int",
-                    description: "Identificador relacionado con el alquiler"
+                    bsonType : "int",
+                    description: "identificador del alquiler al que pertenece"
                 },
                 ID_Cliente : {
-                    bsonType: "int",
-                    description: "Identificador relacionado con el cliente"
+                    bsonType : "int",
+                    description: "identificador del cliente al que pertenece"
                 },
                 ID_Automovil : {
-                    bsonType: "int",
-                    description: "Identificador relacionado con el automovil"
+                    bsonType : "int",
+                    description: "identificador del auto al que pertenece"
                 },
                 Fecha_Inicio : {
-                    bsonType: "date",
-                    description: "Fecha de incio del alquiler"
+                    bsonType : "date",
+                    description: "fecha de inicio del alquiler"
                 },
                 Fecha_Fin : {
-                    bsonType: "date",
-                    description: "Fecha de entrega del validate"
+                    bsonType : "date",
+                    description: "fecha de entrega del alquiler"
                 },
                 Teléfono : {
-                    bsonType: int,
-                    description: "Teléfono relacionado con el alquiler"
+                    bsonType : "string",
+                    description: "telefono xd"
                 },
                 Estado : {
-                    bsonType: "string",
-                    description: "Activo, disponible o innactivo",
-                    enum: ["Activo", "Disponible", "Innactivo"]
-                }
+                    bsonType : "string",
+                    description: "estado actual del alquiler",
+                },
             },
-            additionalProperties: false
-        }
+        },
     },
-    validationLevel : "strict",
     validationAction : "error"
 });
 db.alquiler.insertMany([
@@ -50,8 +55,8 @@ db.alquiler.insertMany([
         "ID_Cliente": 1,
         "ID_Automovil": 1,
         "Fecha_Inicio": ISODate("2023-08-15T00:00:00Z"),
-        "Fecha_Fin": ISODate("2023-07-31T00:00:00Z"), // Fecha válida en formato ISODate
-        "Teléfono": 3176537249,
+        "Fecha_Fin": ISODate("2023-07-31T00:00:00Z"),
+        "Teléfono": "3176537249",
         "Estado": "Activo"
     },
     {
@@ -60,7 +65,7 @@ db.alquiler.insertMany([
         "ID_Automovil": 2,
         "Fecha_Inicio": ISODate("2023-08-01T00:00:00Z"),
         "Fecha_Fin": ISODate("2023-08-15T00:00:00Z"),
-        "Teléfono": 789654123,
+        "Teléfono": "789654123",
         "Estado": "Disponible"
     },
     {
@@ -69,7 +74,7 @@ db.alquiler.insertMany([
         "ID_Automovil": 3,
         "Fecha_Inicio": ISODate("2023-09-01T00:00:00Z"),
         "Fecha_Fin": ISODate("2023-09-30T00:00:00Z"),
-        "Teléfono": 321987654,
+        "Teléfono": "321987654",
         "Estado": "Disponible"
     },
     {
@@ -78,11 +83,10 @@ db.alquiler.insertMany([
         "ID_Automovil": 4,
         "Fecha_Inicio": ISODate("2023-07-15T00:00:00Z"),
         "Fecha_Fin": ISODate("2023-07-25T00:00:00Z"),
-        "Teléfono": 456789321,
+        "Teléfono": "456789321",
         "Estado": "Innactivo"
     }
 ]);
-
 
 use("db_campus_alquiler");
 db.createCollection("automovil",{
@@ -92,7 +96,15 @@ db.createCollection("automovil",{
     validator : {
         $jsonSchema : {
             bsonType: "object",
-            required : [ "ID_Automovil", "Marca", "Modelo", "Año", "Tipo", "Capacidad", "Precio_Diario"],
+            required : [ 
+                "ID_Automovil", 
+                "Marca", 
+                "Modelo", 
+                "Año", 
+                "Tipo", 
+                "Capacidad", 
+                "Precio_Diario"
+            ],
             properties: {
                 ID_Automovil : {
                     bsonType: "int",
