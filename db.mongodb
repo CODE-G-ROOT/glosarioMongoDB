@@ -1,46 +1,133 @@
 use("db_campus_alquiler");
-db.createCollection("alquiler");
+db.createCollection("alquiler",{
+    capped : true,
+    size : 900,
+    max : 5,
+    validator : {
+        $jsonSchema : {
+            bsonType: "object",
+            required : [ "ID_Alquiler", "ID_Cliente", "ID_Automovil", "Fecha_Inicio", "Fecha_Fin", "Teléfono", "Estado"],
+            properties: {
+                ID_Alquiler : {
+                    bsonType: "int",
+                    description: "Identificador relacionado con el alquiler"
+                },
+                ID_Cliente : {
+                    bsonType: "int",
+                    description: "Identificador relacionado con el cliente"
+                },
+                ID_Automovil : {
+                    bsonType: "int",
+                    description: "Identificador relacionado con el automovil"
+                },
+                Fecha_Inicio : {
+                    bsonType: "date",
+                    description: "Fecha de incio del alquiler"
+                },
+                Fecha_Fin : {
+                    bsonType: "date",
+                    description: "Fecha de entrega del validate"
+                },
+                Teléfono : {
+                    bsonType: int,
+                    description: "Teléfono relacionado con el alquiler"
+                },
+                Estado : {
+                    bsonType: "string",
+                    description: "Activo, disponible o innactivo",
+                    enum: ["Activo", "Disponible", "Innactivo"]
+                }
+            },
+            additionalProperties: false
+        }
+    },
+    validationLevel : "strict",
+    validationAction : "error"
+});
 db.alquiler.insertMany([
     {
         "ID_Alquiler": 1,
         "ID_Cliente": 1,
         "ID_Automovil": 1,
-        "Fecha_Inicio": 20230701,
-        "Fecha_Fin": 20230731,
-        "Teléfono": "No hay chamba",
+        "Fecha_Inicio": ISODate("2023-08-15T00:00:00Z"),
+        "Fecha_Fin": ISODate("2023-07-31T00:00:00Z"), // Fecha válida en formato ISODate
+        "Teléfono": 3176537249,
         "Estado": "Activo"
     },
     {
         "ID_Alquiler": 2,
         "ID_Cliente": 2,
         "ID_Automovil": 2,
-        "Fecha_Inicio": 20230801,
-        "Fecha_Fin": 20230815,
-        "Teléfono": "789654123",
+        "Fecha_Inicio": ISODate("2023-08-01T00:00:00Z"),
+        "Fecha_Fin": ISODate("2023-08-15T00:00:00Z"),
+        "Teléfono": 789654123,
         "Estado": "Disponible"
     },
     {
         "ID_Alquiler": 3,
         "ID_Cliente": 3,
         "ID_Automovil": 3,
-        "Fecha_Inicio": 20230901,
-        "Fecha_Fin": 20230930,
-        "Teléfono": "321987654",
+        "Fecha_Inicio": ISODate("2023-09-01T00:00:00Z"),
+        "Fecha_Fin": ISODate("2023-09-30T00:00:00Z"),
+        "Teléfono": 321987654,
         "Estado": "Disponible"
     },
     {
         "ID_Alquiler": 4,
         "ID_Cliente": 4,
         "ID_Automovil": 4,
-        "Fecha_Inicio": 20230715,
-        "Fecha_Fin": 20230725,
-        "Teléfono": "456789321",
-        "Estado": "Activo"
+        "Fecha_Inicio": ISODate("2023-07-15T00:00:00Z"),
+        "Fecha_Fin": ISODate("2023-07-25T00:00:00Z"),
+        "Teléfono": 456789321,
+        "Estado": "Innactivo"
     }
 ]);
 
+
 use("db_campus_alquiler");
-db.createCollection("automovil");
+db.createCollection("automovil",{
+    capped : true,
+    size : 650,
+    max : 5,
+    validator : {
+        $jsonSchema : {
+            bsonType: "object",
+            required : [ "ID_Automovil", "Marca", "Modelo", "Año", "Tipo", "Capacidad", "Precio_Diario"],
+            properties: {
+                ID_Automovil : {
+                    bsonType: "int",
+                    description: "Identificador del automovil",
+                },
+                Marca : {
+                    bsonType: "string",
+                    description: "nombre de la marca",
+                },
+                Modelo : {
+                    bsonType: "string",
+                    description: "modelo de la marca",
+                },
+                Año : {
+                    bsonType: "int",
+                    description: "año de automovil, solo se permite el ingreso del año como número, no como fecha",
+                },
+                Tipo : {
+                    bsonType: "string",
+                    description: "año de automovil",
+                },
+                Capacidad : {
+                    bsonType: "int",
+                    description: "capacidad de cupos en el auto",
+                },
+                Precio_Diario : {
+                    bsonType: "int",
+                    description: "precio del automovil",
+                },
+            }
+        }
+    },
+    validationLevel : "strict",
+    validationAction : "error"
+});
 db.automovil.insertMany([
     {
         "ID_Automovil": 1,
@@ -81,7 +168,42 @@ db.automovil.insertMany([
 ]);
 
 use("db_campus_alquiler");
-db.createCollection("cliente");
+db.createCollection("cliente",{
+    capped : true,
+    size : 650,
+    max : 5,
+    validator : {
+        $jsonSchema : {
+            bsonType: "object",
+            required : [ "ID_Empleado", "Nombre", "Apellido", "DNI", "Dirección", "Telefono", "Cargo"],
+            properties: {
+                ID_Empleado : {
+
+                },
+                Nombre : {
+
+                },
+                Apellido : {
+
+                },
+                DNI : {
+
+                },
+                Dirección : {
+
+                },
+                Telefono : {
+
+                },
+                Cargo : {
+
+                },
+            }
+        }
+    },
+    validationLevel : "strict",
+    validationAction : "error"
+});
 db.cliente.insertMany([
     {
         "ID_Cliente": 1,
