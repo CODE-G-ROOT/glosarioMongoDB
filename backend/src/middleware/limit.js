@@ -5,8 +5,19 @@ export let confiGET = () => rateLimit({
     max : 5,
     standardHeaders : true,
     legacyHeaders : false,
-    message: {
-        status: 416,
-        message: "Tiempo agotado"
+    skip: (req, res) =>{
+        if(req.headers['contenct-lenght']>91) {
+            res.status(413).send({
+                status : 413,
+                message : "Tamaño exedido"
+            });
+            return true
+        }
+    },
+    message: (req, res)=>{
+        res.status(429).send({
+            status: 429,
+            message: "Piala"
+        })
     }
 });
