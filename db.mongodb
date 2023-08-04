@@ -179,41 +179,58 @@ db.automovil.insertMany([
     }
 ]);
 
+
+//! VERIFICAR LA VALIDACIÓN
 use("db_campus_alquiler");
 db.createCollection("cliente",{
     capped : true,
-    size : 650,
+    size : 910,
     max : 5,
     validator : {
         $jsonSchema : {
             bsonType: "object",
-            required : [ "ID_Empleado", "Nombre", "Apellido", "DNI", "Dirección", "Telefono", "Cargo"],
+            required : [
+                "ID_Cliente",
+                "Nombre",
+                "Apellido",
+                "DNI",
+                "Dirección",
+                "Teléfono",
+                "Email",
+            ],
             properties: {
-                ID_Empleado : {
-
+                ID_Cliente : {
+                    bsonType: "int",
+                    description: "Identificador del automovil",
                 },
                 Nombre : {
-
+                    bsonType: "string",
+                    description: "Identificador del automovil",
                 },
                 Apellido : {
-
+                    bsonType: "string",
+                    description: "Identificador del automovil",
                 },
                 DNI : {
-
+                    bsonType: "int",
+                    description: "Identificador del automovil",
                 },
                 Dirección : {
-
+                    bsonType: "string",
+                    description: "Identificador del automovil",
                 },
-                Telefono : {
-
+                Teléfono : {
+                    bsonType: "int",
+                    description: "Identificador del automovil",
                 },
-                Cargo : {
-
+                Email : {
+                    bsonType: "string",
+                    description: "Identificador del automovil",
+                    pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
                 },
             }
         }
     },
-    validationLevel : "strict",
     validationAction : "error"
 });
 db.cliente.insertMany([
@@ -223,7 +240,7 @@ db.cliente.insertMany([
         "Apellido": "Avila",
         "DNI": 317456987,
         "Dirección": "Calle 104E",
-        "Teléfono": "No hay chamba",
+        "Teléfono": 3176537249,
         "Email": "juanavila8856@gmail.com"
     },
     {
@@ -232,7 +249,7 @@ db.cliente.insertMany([
         "Apellido": "García",
         "DNI": 789012345,
         "Dirección": "Avenida Central, 456",
-        "Teléfono": "987654321",
+        "Teléfono": 987654321,
         "Email": "mariagarcia123@gmail.com"
     },
     {
@@ -241,7 +258,7 @@ db.cliente.insertMany([
         "Apellido": "López",
         "DNI": 678901234,
         "Dirección": "Plaza Mayor, 789",
-        "Teléfono": "321654987",
+        "Teléfono": 321654987,
         "Email": "pedrolopez789@gmail.com"
     },
     {
@@ -250,10 +267,19 @@ db.cliente.insertMany([
         "Apellido": "Martínez",
         "DNI": 345678901,
         "Dirección": "Calle Secundaria, 111",
-        "Teléfono": "147258369",
+        "Teléfono": 147258369,
         "Email": "lauramartinez456@gmail.com"
     }
 ]);
+
+
+
+
+
+
+
+
+
 
 use("db_campus_alquiler");
 db.createCollection("empleado");
