@@ -1,4 +1,4 @@
-//TODO  CHECK
+//?  CHECK
 use("db_campus_alquiler");
 db.createCollection("alquiler", {
   capped: true,
@@ -89,8 +89,7 @@ db.alquiler.insertMany([
   }
 ]);
 
-
-//TODO  CHECK
+//? CHECK
 use("db_campus_alquiler");
 db.createCollection("automovil", {
   capped: true,
@@ -182,7 +181,7 @@ db.automovil.insertMany([
   }
 ]);
 
-//TODO CHECK
+//? CHECK
 use("db_campus_alquiler");
 db.createCollection("cliente", {
   capped: true,
@@ -274,7 +273,7 @@ db.cliente.insertMany([
   }
 ]);
 
-//TODO  CHECK
+//?  CHECK
 use("db_campus_alquiler");
 db.createCollection("empleado"), {
   capped: true,
@@ -380,8 +379,8 @@ db.empleado.insertMany([
   }
 ]);
 
-//TODO CHECK
-//? LOS VALORES double deben ser validados como ['double'], además en la inserción de data, los valores que estén en un campo int, no pueden contener commillas
+//? CHECK
+//TODO LOS VALORES double deben ser validados como ['double'], además en la inserción de data, los valores que estén en un campo int, no pueden contener commillas
 //! ES OBLIGATORIO QUE LOS CAMPOS TENGAN SU FUNCIÓN CORRESPONDIENTE PARA LA INSERCIÓN
 use("db_campus_alquiler");
 db.createCollection("registro_devolución", {
@@ -482,6 +481,7 @@ db.registro_devolución.insertMany([
   }
 ]);
 
+//? CHECK
 //! PARA LOS VALORES DOUBLE, ES IMPORTANTISIMO QUE != 0 && != "NUMBER" + .00
 //Para que el double pase, es importante que sus inserts sean
 //number != int
@@ -530,7 +530,8 @@ db.createCollection("registro_entrega", {
       }
     }
   },
-  // validationAction: "error"
+  validationLevel : "strict",
+  validationAction: "error"
 });
 db.registro_entrega.insertMany([
   {
@@ -573,49 +574,90 @@ db.registro_entrega.insertMany([
   }
 ]);
 
+//? CHECK
 use("db_campus_alquiler");
-db.registro_entrega.drop();
-
-use("db_campus_alquiler");
-db.createCollection("automovil");
+db.createCollection("reserva", {
+  capped: true,
+  size: 850,
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: [
+        "ID_Reserva",
+        "ID_Cliente",
+        "ID_Automovil",
+        "Fecha_Reserva",
+        "Fecha_Inicio",
+        "Fecha_Fin",
+        "Estado",
+      ],
+      properties: {
+        ID_Reserva : {
+          bsonType : "int",
+        },
+        ID_Cliente : {
+          bsonType : "int",
+        },
+        ID_Automovil : {
+          bsonType : "int",
+        },
+        Fecha_Reserva : {
+          bsonType : "date",
+        },
+        Fecha_Inicio : {
+          bsonType : "date",
+        },
+        Fecha_Fin : {
+          bsonType : "date",
+        },
+        Estado : {
+          bsonType : "string",
+        },
+      }
+    }
+  },
+  validationLevel : "strict",
+  validationAction: "error"
+});
 db.reserva.insertMany([
   {
     "ID_Reserva": 1,
     "ID_Cliente": 1,
     "ID_Automovil": 1,
-    "Fecha_Reserva": int32(20230601),
-    "Fecha_Inicio": int32(20230701),
-    "Fecha_Fin": int32(20230731),
+    "Fecha_Reserva": ISODate("2023-06-01T00:00:00Z"),
+    "Fecha_Inicio": ISODate("2023-07-01T00:00:00Z"),
+    "Fecha_Fin": ISODate("2023-07-31T00:00:00Z"),
     "Estado": "Con deudas"
   },
   {
     "ID_Reserva": 2,
     "ID_Cliente": 2,
     "ID_Automovil": 2,
-    "Fecha_Reserva": int32(20230515),
-    "Fecha_Inicio": int32(20230801),
-    "Fecha_Fin": int32(20230815),
+    "Fecha_Reserva": ISODate("2023-05-15T00:00:00Z"),
+    "Fecha_Inicio": ISODate("2023-08-01T00:00:00Z"),
+    "Fecha_Fin": ISODate("2023-08-15T00:00:00Z"),
     "Estado": "Disponible"
   },
   {
     "ID_Reserva": 3,
     "ID_Cliente": 3,
     "ID_Automovil": 3,
-    "Fecha_Reserva": int32(20230720),
-    "Fecha_Inicio": int32(20230901),
-    "Fecha_Fin": int32(20230930),
+    "Fecha_Reserva": ISODate("2023-07-20T00:00:00Z"),
+    "Fecha_Inicio": ISODate("2023-09-01T00:00:00Z"),
+    "Fecha_Fin": ISODate("2023-09-30T00:00:00Z"),
     "Estado": "Disponible"
   },
   {
     "ID_Reserva": 4,
     "ID_Cliente": 4,
     "ID_Automovil": 4,
-    "Fecha_Reserva": int32(20230625),
-    "Fecha_Inicio": int32(20230715),
-    "Fecha_Fin": int32(20230725),
+    "Fecha_Reserva": ISODate("2023-06-25T00:00:00Z"),
+    "Fecha_Inicio": ISODate("2023-07-15T00:00:00Z"),
+    "Fecha_Fin": ISODate("2023-07-25T00:00:00Z"),
     "Estado": "Con deudas"
   }
 ]);
+
 
 use("db_campus_alquiler");
 db.createCollection("sucursal");
@@ -645,6 +687,11 @@ db.sucursal.insertMany([
     "Teléfono": "147258369"
   }
 ]);
+
+use("db_campus_alquiler");
+db.reserva.drop();
+
+
 
 use("db_campus_alquiler");
 db.createCollection("sucursal_automovil");
