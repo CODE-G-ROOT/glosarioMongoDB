@@ -719,32 +719,55 @@ db.sucursal.insertMany([
   }
 ]);
 
+//? CHECK
 use("db_campus_alquiler");
-db.reserva.drop();
-
-
-
-use("db_campus_alquiler");
-db.createCollection("sucursal_automovil");
+db.createCollection("sucursal_automovil", {
+  capped : true,
+  size : 405,
+  max : 5,
+  validator : {
+    $jsonSchema : {
+      bsonType : "object",
+      required : [
+        "ID_Sucursal",
+        "ID_Automovil",
+        "Cantidad_Disponible",
+      ],
+      properties : {
+        ID_Sucursal : {
+          bsonType : "int"
+        },
+        ID_Automovil : {
+          bsonType : "int"
+        },
+        Cantidad_Disponible : {
+          bsonType : "int"
+        },
+      }
+    }
+  },
+  validationAction: "error",
+  validationLevel: "strict"
+});
 db.sucursal_automovil.insertMany([
   {
     "ID_Sucursal": 1,
     "ID_Automovil": 1,
-    "Cantidad_Disponible": 777
+    "Cantidad_Disponible": Int32(777)
   },
   {
     "ID_Sucursal": 2,
     "ID_Automovil": 2,
-    "Cantidad_Disponible": 500
+    "Cantidad_Disponible": Int32(500)
   },
   {
     "ID_Sucursal": 3,
     "ID_Automovil": 3,
-    "Cantidad_Disponible": 300
+    "Cantidad_Disponible": Int32(300)
   },
   {
     "ID_Sucursal": 4,
     "ID_Automovil": 4,
-    "Cantidad_Disponible": 100
+    "Cantidad_Disponible": Int32(100)
   }
 ]);
