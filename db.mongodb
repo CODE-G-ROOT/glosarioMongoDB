@@ -389,7 +389,7 @@ db.createCollection("registro_devolución", {
   size: 950,
   max: 5,
   validator: {
-    $jsonSchema : {
+    $jsonSchema: {
       bsonType: "object",
       required: [
         "ID_Registro",
@@ -482,139 +482,191 @@ db.registro_devolución.insertMany([
   }
 ]);
 
+//! PARA LOS VALORES DOUBLE, ES IMPORTANTISIMO QUE != 0 && != "NUMBER" + .00
+//Para que el double pase, es importante que sus inserts sean
+//number != int
+//number >= 0.01
+use("db_campus_alquiler");
+db.createCollection("registro_entrega", {
+  capped: true,
+  size: 850,
+  max: 5,
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: [
+        "ID_Registro",
+        "ID_Alquiler",
+        "ID_Empleado",
+        "Fecha_Entregado",
+        "Combustible_Entregado",
+        "Kilometraje_Entregado",
+      ],
+      properties: {
+        ID_Registro: {
+          bsonType: "int",
+          description: "identificador del Registro al que pertenece"
+        },
+        ID_Alquiler: {
+          bsonType: "int",
+          description: "identificador del Registro al que pertenece"
+        },
+        ID_Empleado: {
+          bsonType: "int",
+          description: "identificador del Registro al que pertenece"
+        },
+        Fecha_Entregado: {
+          bsonType: "date",
+          description: "identificador del Registro al que pertenece"
+        },
+        Combustible_Entregado: {
+          bsonType: ["double"],
+          description: "identificador del Registro al que pertenece"
+        },
+        Kilometraje_Entregado: {
+          bsonType: ["double"],
+          description: "identificador del Registro al que pertenece"
+        },
+      }
+    }
+  },
+  // validationAction: "error"
+});
+db.registro_entrega.insertMany([
+  {
+    //? SI PASA
+    "ID_Registro": 1,
+    "ID_Alquiler": 1,
+    "ID_Empleado": 1,
+    "Fecha_Entregado": ISODate("2023-07-31T00:00:00Z"),
+    "Combustible_Entregado": 50.25,
+    "Kilometraje_Entregado": 1200.75
+  },
+  {
+    //? SI PASA
+    "ID_Registro": 2,
+    "ID_Alquiler": 2,
+    "ID_Empleado": 2,
+    "Fecha_Entregado": ISODate("2023-07-30T00:00:00Z"),
+    "Combustible_Entregado": 40.5,
+    "Kilometraje_Entregado": 1050.25
+  },
+  {
+    //TODO
+    // 
 
+    "ID_Registro": 3,
+    "ID_Alquiler": 3,
+    "ID_Empleado": 3,
+    "Fecha_Entregado": ISODate("2023-07-29T00:00:00Z"),
+    "Combustible_Entregado": 60.75,
+    "Kilometraje_Entregado": 1500.01
+  },
+  {
+    //! FALLA LA VALIDACIÓN
+    "ID_Registro": 4,
+    "ID_Alquiler": 4,
+    "ID_Empleado": 4,
+    "Fecha_Entregado": ISODate("2023-07-28T00:00:00Z"),
+    "Combustible_Entregado": 45.01,
+    "Kilometraje_Entregado": 1350.50
+  }
+]);
 
 use("db_campus_alquiler");
-db.registro_devolución.drop();
+db.registro_entrega.drop();
 
-// use("db_campus_alquiler");
-// db.createCollection("registro_entrega");
-// db.registro_entrega.insertMany([
-//     {
-//         "ID_Registro": 1,
-//         "ID_Alquiler": 1,
-//         "ID_Empleado": 1,
-//         "Fecha_Entregado": 20230731,
-//         "Combustible_Entregado": 50.25,
-//         "Kilometraje_Entregado": 1200.75
-//     },
-//     {
-//         "ID_Registro": 2,
-//         "ID_Alquiler": 2,
-//         "ID_Empleado": 2,
-//         "Fecha_Entregado": 20230730,
-//         "Combustible_Entregado": 40.5,
-//         "Kilometraje_Entregado": 1050.25
-//     },
-//     {
-//         "ID_Registro": 3,
-//         "ID_Alquiler": 3,
-//         "ID_Empleado": 3,
-//         "Fecha_Entregado": 20230729,
-//         "Combustible_Entregado": 60.75,
-//         "Kilometraje_Entregado": 1500
-//     },
-//     {
-//         "ID_Registro": 4,
-//         "ID_Alquiler": 4,
-//         "ID_Empleado": 4,
-//         "Fecha_Entregado": 20230728,
-//         "Combustible_Entregado": 45,
-//         "Kilometraje_Entregado": 1350.5
-//     }
-// ]);
+use("db_campus_alquiler");
+db.createCollection("automovil");
+db.reserva.insertMany([
+  {
+    "ID_Reserva": 1,
+    "ID_Cliente": 1,
+    "ID_Automovil": 1,
+    "Fecha_Reserva": int32(20230601),
+    "Fecha_Inicio": int32(20230701),
+    "Fecha_Fin": int32(20230731),
+    "Estado": "Con deudas"
+  },
+  {
+    "ID_Reserva": 2,
+    "ID_Cliente": 2,
+    "ID_Automovil": 2,
+    "Fecha_Reserva": int32(20230515),
+    "Fecha_Inicio": int32(20230801),
+    "Fecha_Fin": int32(20230815),
+    "Estado": "Disponible"
+  },
+  {
+    "ID_Reserva": 3,
+    "ID_Cliente": 3,
+    "ID_Automovil": 3,
+    "Fecha_Reserva": int32(20230720),
+    "Fecha_Inicio": int32(20230901),
+    "Fecha_Fin": int32(20230930),
+    "Estado": "Disponible"
+  },
+  {
+    "ID_Reserva": 4,
+    "ID_Cliente": 4,
+    "ID_Automovil": 4,
+    "Fecha_Reserva": int32(20230625),
+    "Fecha_Inicio": int32(20230715),
+    "Fecha_Fin": int32(20230725),
+    "Estado": "Con deudas"
+  }
+]);
 
-// use("reserva");
-// db.createCollection("automovil");
-// db.reserva.insertMany([
-//     {
-//         "ID_Reserva": 1,
-//         "ID_Cliente": 1,
-//         "ID_Automovil": 1,
-//         "Fecha_Reserva": 20230601,
-//         "Fecha_Inicio": 20230701,
-//         "Fecha_Fin": 20230731,
-//         "Estado": "Con deudas"
-//     },
-//     {
-//         "ID_Reserva": 2,
-//         "ID_Cliente": 2,
-//         "ID_Automovil": 2,
-//         "Fecha_Reserva": 20230515,
-//         "Fecha_Inicio": 20230801,
-//         "Fecha_Fin": 20230815,
-//         "Estado": "Disponible"
-//     },
-//     {
-//         "ID_Reserva": 3,
-//         "ID_Cliente": 3,
-//         "ID_Automovil": 3,
-//         "Fecha_Reserva": 20230720,
-//         "Fecha_Inicio": 20230901,
-//         "Fecha_Fin": 20230930,
-//         "Estado": "Disponible"
-//     },
-//     {
-//         "ID_Reserva": 4,
-//         "ID_Cliente": 4,
-//         "ID_Automovil": 4,
-//         "Fecha_Reserva": 20230625,
-//         "Fecha_Inicio": 20230715,
-//         "Fecha_Fin": 20230725,
-//         "Estado": "Con deudas"
-//     }
-// ]);
+use("db_campus_alquiler");
+db.createCollection("sucursal");
+db.sucursal.insertMany([
+  {
+    "ID_Sucursal": 1,
+    "Nombre": "Sucursal_1",
+    "Dirección": "Calle 104E",
+    "Teléfono": "137564813"
+  },
+  {
+    "ID_Sucursal": 2,
+    "Nombre": "Sucursal_2",
+    "Dirección": "Avenida Central, 456",
+    "Teléfono": "987654321"
+  },
+  {
+    "ID_Sucursal": 3,
+    "Nombre": "Sucursal_3",
+    "Dirección": "Plaza Mayor, 789",
+    "Teléfono": "321654987"
+  },
+  {
+    "ID_Sucursal": 4,
+    "Nombre": "Sucursal_4",
+    "Dirección": "Calle Secundaria, 111",
+    "Teléfono": "147258369"
+  }
+]);
 
-// use("db_campus_alquiler");
-// db.createCollection("sucursal");
-// db.sucursal.insertMany([
-//     {
-//         "ID_Sucursal": 1,
-//         "Nombre": "Sucursal_1",
-//         "Dirección": "Calle 104E",
-//         "Teléfono": "137564813"
-//     },
-//     {
-//         "ID_Sucursal": 2,
-//         "Nombre": "Sucursal_2",
-//         "Dirección": "Avenida Central, 456",
-//         "Teléfono": "987654321"
-//     },
-//     {
-//         "ID_Sucursal": 3,
-//         "Nombre": "Sucursal_3",
-//         "Dirección": "Plaza Mayor, 789",
-//         "Teléfono": "321654987"
-//     },
-//     {
-//         "ID_Sucursal": 4,
-//         "Nombre": "Sucursal_4",
-//         "Dirección": "Calle Secundaria, 111",
-//         "Teléfono": "147258369"
-//     }
-// ]);
-
-// use("db_campus_alquiler");
-// db.createCollection("sucursal_automovil");
-// db.sucursal_automovil.insertMany([
-//     {
-//         "ID_Sucursal": 1,
-//         "ID_Automovil": 1,
-//         "Cantidad_Disponible": 777
-//     },
-//     {
-//         "ID_Sucursal": 2,
-//         "ID_Automovil": 2,
-//         "Cantidad_Disponible": 500
-//     },
-//     {
-//         "ID_Sucursal": 3,
-//         "ID_Automovil": 3,
-//         "Cantidad_Disponible": 300
-//     },
-//     {
-//         "ID_Sucursal": 4,
-//         "ID_Automovil": 4,
-//         "Cantidad_Disponible": 100
-//     }
-// ]);
+use("db_campus_alquiler");
+db.createCollection("sucursal_automovil");
+db.sucursal_automovil.insertMany([
+  {
+    "ID_Sucursal": 1,
+    "ID_Automovil": 1,
+    "Cantidad_Disponible": 777
+  },
+  {
+    "ID_Sucursal": 2,
+    "ID_Automovil": 2,
+    "Cantidad_Disponible": 500
+  },
+  {
+    "ID_Sucursal": 3,
+    "ID_Automovil": 3,
+    "Cantidad_Disponible": 300
+  },
+  {
+    "ID_Sucursal": 4,
+    "ID_Automovil": 4,
+    "Cantidad_Disponible": 100
+  }
+]);
