@@ -380,96 +380,112 @@ db.empleado.insertMany([
   }
 ]);
 
-//? Siguiente a configurar
+//TODO CHECK
+//? LOS VALORES double deben ser validados como ['double'], además en la inserción de data, los valores que estén en un campo int, no pueden contener commillas
+//! ES OBLIGATORIO QUE LOS CAMPOS TENGAN SU FUNCIÓN CORRESPONDIENTE PARA LA INSERCIÓN
 use("db_campus_alquiler");
 db.createCollection("registro_devolución", {
   capped: true,
-  size: 5,
+  size: 950,
+  max: 5,
   validator: {
-    bsonType: "object",
-    required: [,
-      "ID_Registro",
-      "ID_Alquiler",
-      "ID_Empleado",
-      "Fecha_Devolución",
-      "Combustible_Devolución",
-      "Kilometraje_Devuelto",
-      "Monto_Adicional"
-    ],
-    properties: {
-      ID_Registro: {
-        bsonType: "int",
-        description: "identificador del Registro al que pertenece"
-      },
-      ID_Alquiler: {
-        bsonType: "int",
-        description: "identificador del Registro al que pertenece"
-      },  
-      ID_Empleado: {
-
-      },
-      Fecha_Devolución: {
-
-      },
-      Combustible_Devolución: {
-
-      },
-      Kilometraje_Devuelto: {
-
-      },
-      Monto_Adicional: {
-
-      },
+    $jsonSchema : {
+      bsonType: "object",
+      required: [
+        "ID_Registro",
+        "ID_Alquiler",
+        "ID_Empleado",
+        "Fecha_Devolución",
+        "Combustible_Devolución",
+        "Kilometraje_Devuelto",
+        "Monto_Adicional"
+      ],
+      properties: {
+        ID_Registro: {
+          bsonType: "int",
+          description: "identificador del Registro al que pertenece"
+        },
+        ID_Alquiler: {
+          bsonType: "int",
+          description: "identificador del Alquiler al que pertenece"
+        },
+        ID_Empleado: {
+          bsonType: "int",
+          description: "identificador del empleado al que pertenece"
+        },
+        Fecha_Devolución: {
+          bsonType: "date",
+          description: "Fecha de devolución del registro"
+        },
+        Combustible_Devolución: {
+          bsonType: ['double'],
+          description: "cantidad de combustible devuelto"
+        },
+        Kilometraje_Devuelto: {
+          bsonType: ['double'],
+          description: "kilometraje devuelto"
+        },
+        Monto_Adicional: {
+          bsonType: "int",
+          description: "monto adicional por devolución"
+        },
+      }
     }
-  }
+  },
+  validationAction: "error"
 });
 db.registro_devolución.insertMany([
   {
-    "ID_Registro": 1,
-    "ID_Alquiler": 123,
-    "ID_Empleado": 1,
-    "Fecha_Devolución": 20230731,
-    "Combustible_Devolución": 50.25,
-    "Kilometraje_Devuelto": 1200.75,
-    "Monto_Adicional": 50
+    "ID_Registro": Int32(1),
+    "ID_Alquiler": Int32(123),
+    "ID_Empleado": Int32(1),
+    "Fecha_Devolución": ISODate("2023-07-31T00:00:00Z"),
+    "Combustible_Devolución": Double(50.25),
+    "Kilometraje_Devuelto": Double(1200.75),
+    "Monto_Adicional": Int32(50)
   },
   {
-    "ID_Registro": 2,
-    "ID_Alquiler": 456,
-    "ID_Empleado": 2,
-    "Fecha_Devolución": 20230730,
-    "Combustible_Devolución": 40.5,
-    "Kilometraje_Devuelto": 1050.25,
-    "Monto_Adicional": 30
+    "ID_Registro": Int32(2),
+    "ID_Alquiler": Int32(456),
+    "ID_Empleado": Int32(2),
+    "Fecha_Devolución": ISODate("2023-07-30T00:00:00Z"),
+    "Combustible_Devolución": Double(40.5),
+    "Kilometraje_Devuelto": Double(1050.25),
+    "Monto_Adicional": Int32(30)
   },
   {
-    "ID_Registro": 3,
-    "ID_Alquiler": 789,
-    "ID_Empleado": 3,
-    "Fecha_Devolución": 20230729,
-    "Combustible_Devolución": 60.75,
-    "Kilometraje_Devuelto": 1500,
-    "Monto_Adicional": 20
+    "ID_Registro": Int32(3),
+    "ID_Alquiler": Int32(789),
+    "ID_Empleado": Int32(3),
+    "Fecha_Devolución": ISODate("2023-07-29T00:00:00Z"),
+    "Combustible_Devolución": Double(60.75),
+    "Kilometraje_Devuelto": Double(1500),
+    "Monto_Adicional": Int32(20)
   },
   {
-    "ID_Registro": 4,
-    "ID_Alquiler": 101112,
-    "ID_Empleado": 4,
-    "Fecha_Devolución": 20230728,
-    "Combustible_Devolución": 45,
-    "Kilometraje_Devuelto": 1350.5,
-    "Monto_Adicional": 40
+    "ID_Registro": Int32(4),
+    "ID_Alquiler": Int32(101112),
+    "ID_Empleado": Int32(4),
+    "Fecha_Devolución": ISODate("2023-07-28T00:00:00Z"),
+    "Combustible_Devolución": Double(45),
+    "Kilometraje_Devuelto": Double(1350.5),
+    "Monto_Adicional": Int32(40)
   },
   {
-    "ID_Registro": 5,
-    "ID_Alquiler": 131415,
-    "ID_Empleado": 5,
-    "Fecha_Devolución": 20230727,
-    "Combustible_Devolución": 55.5,
-    "Kilometraje_Devuelto": 1400.75,
-    "Monto_Adicional": 25
+    "ID_Registro": Int32(5),
+    "ID_Alquiler": Int32(131415),
+    "ID_Empleado": Int32(5),
+    "Fecha_Devolución": ISODate("2023-07-27T00:00:00Z"),
+    "Combustible_Devolución": Double(55.5),
+    "Kilometraje_Devuelto": Double(1400.75),
+    "Monto_Adicional": Int32(25)
   }
 ]);
+
+
+
+use("db_campus_alquiler");
+db.registro_devolución.drop();
 
 // use("db_campus_alquiler");
 // db.createCollection("registro_entrega");
