@@ -1,3 +1,4 @@
+//TODO  CHECK
 use("db_campus_alquiler");
 db.createCollection("alquiler",{
     capped : true,
@@ -88,6 +89,8 @@ db.alquiler.insertMany([
     }
 ]);
 
+
+//TODO  CHECK
 use("db_campus_alquiler");
 db.createCollection("automovil",{
     capped : true,
@@ -180,7 +183,7 @@ db.automovil.insertMany([
 ]);
 
 
-//! VERIFICAR LA VALIDACIÓN
+//! VERIFICAR LA VALIDACIÓN -> FALLO DE VALIDACIÓN DEL DOCUMENTO
 use("db_campus_alquiler");
 db.createCollection("cliente",{
     capped : true,
@@ -226,7 +229,7 @@ db.createCollection("cliente",{
                 Email : {
                     bsonType: "string",
                     description: "Identificador del automovil",
-                    pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                    // pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
                 },
             }
         }
@@ -273,16 +276,64 @@ db.cliente.insertMany([
 ]);
 
 
-
-
-
-
-
-
-
-
+//TODO  CHECK
 use("db_campus_alquiler");
-db.createCollection("empleado");
+db.createCollection("empleado"), {
+    capped : true,
+    size : 999,
+    max : 5,
+    validator : {
+        bsonType : "object",
+        required : [
+            "ID_Empleado",
+            "Nombre",
+            "Apellido",
+            "DNI",
+            "Dirección",
+            "Telefono",
+            "Cargo",
+        ],
+        properties : {
+            ID_Empleado : {
+                bsonType : "int",
+                description: "identificador del empleado al que pertenece"
+            },
+            Nombre : {
+                bsonType : "string",
+                description: "Nombre del empleado"
+            },
+            Apellido : {
+                bsonType : "string",
+                description: "Nombre del empleado"
+            },
+            DNI : {
+                bsonType : "int",
+                description: "identificador DNI del empleado"
+            },
+            Dirección : {
+                bsonType : "string",
+                description: "Dirección de residencia del empleado"
+            },
+            Telefono : {
+                bsonType : "string",
+                description: "Número de contacto del empleado"
+            },
+            Cargo : {
+                bsonType : "string",
+                description: "Cargo al que pertenece el empleado",
+                enum: [
+                    "Gerente",
+                    "Supervisor",
+                    "Asistente",
+                    "Recepcionista",
+                    "Operador",
+                ]
+            },
+        }
+    },
+    validationLevel : "strict",
+    validationAction : "error"
+};
 db.empleado.insertMany([
     {
         "ID_Empleado": 1,
@@ -331,6 +382,7 @@ db.empleado.insertMany([
     }
 ]);
 
+//?Siguiente a configurar
 use("db_campus_alquiler");
 db.createCollection("registro_devolución");
 db.registro_devolución.insertMany([
