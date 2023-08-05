@@ -658,33 +658,64 @@ db.reserva.insertMany([
   }
 ]);
 
-
+//? CHECK
 use("db_campus_alquiler");
-db.createCollection("sucursal");
+db.createCollection("sucursal", {
+  capped : true,
+  size : 520,
+  max : 5,
+  validator : {
+    $jsonSchema : {
+      bsonType : "object",
+      required : [
+        "ID_Sucursal",
+        "Nombre",
+        "Dirección",
+        "Teléfono",
+      ],
+      properties : {
+        ID_Sucursal : {
+          bsonType : "int",
+        },
+        Nombre : {
+          bsonType : "string",
+        },
+        Dirección : {
+          bsonType : "string",
+        },
+        Teléfono : {
+          bsonType : "int",
+        },
+      }
+    }
+  },
+  validationAction : "error",
+  validationLevel : "strict"
+});
 db.sucursal.insertMany([
   {
     "ID_Sucursal": 1,
     "Nombre": "Sucursal_1",
     "Dirección": "Calle 104E",
-    "Teléfono": "137564813"
+    "Teléfono": Int32(137564813)
   },
   {
     "ID_Sucursal": 2,
     "Nombre": "Sucursal_2",
     "Dirección": "Avenida Central, 456",
-    "Teléfono": "987654321"
+    "Teléfono": Int32(987654321)
   },
   {
     "ID_Sucursal": 3,
     "Nombre": "Sucursal_3",
     "Dirección": "Plaza Mayor, 789",
-    "Teléfono": "321654987"
+    "Teléfono": Int32(321654987)
   },
   {
     "ID_Sucursal": 4,
     "Nombre": "Sucursal_4",
     "Dirección": "Calle Secundaria, 111",
-    "Teléfono": "147258369"
+    "Teléfono": Int32(147258369)
   }
 ]);
 
