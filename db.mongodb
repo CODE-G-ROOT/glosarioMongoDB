@@ -182,12 +182,11 @@ db.automovil.insertMany([
     }
 ]);
 
-
-//! VERIFICAR LA VALIDACIÓN -> FALLO DE VALIDACIÓN DEL DOCUMENTO
+//TODO CHECK
 use("db_campus_alquiler");
 db.createCollection("cliente",{
     capped : true,
-    size : 910,
+    size : 1000,
     max : 5,
     validator : {
         $jsonSchema : {
@@ -238,43 +237,42 @@ db.createCollection("cliente",{
 });
 db.cliente.insertMany([
     {
-        "ID_Cliente": 1,
+        "ID_Cliente": Int32(1),
         "Nombre": "Juan",
         "Apellido": "Avila",
-        "DNI": 317456987,
+        "DNI": Int32(317456987),
         "Dirección": "Calle 104E",
-        "Teléfono": 3176537249,
+        "Teléfono": Int32(3176537249),
         "Email": "juanavila8856@gmail.com"
     },
     {
-        "ID_Cliente": 2,
+        "ID_Cliente": Int32(2),
         "Nombre": "María",
         "Apellido": "García",
-        "DNI": 789012345,
+        "DNI": Int32(789012345),
         "Dirección": "Avenida Central, 456",
-        "Teléfono": 987654321,
+        "Teléfono": Int32(987654321),
         "Email": "mariagarcia123@gmail.com"
     },
     {
-        "ID_Cliente": 3,
+        "ID_Cliente": Int32(3),
         "Nombre": "Pedro",
         "Apellido": "López",
-        "DNI": 678901234,
+        "DNI": Int32(678901234),
         "Dirección": "Plaza Mayor, 789",
-        "Teléfono": 321654987,
+        "Teléfono": Int32(321654987),
         "Email": "pedrolopez789@gmail.com"
     },
     {
-        "ID_Cliente": 4,
+        "ID_Cliente": Int32(4),
         "Nombre": "Laura",
         "Apellido": "Martínez",
-        "DNI": 345678901,
+        "DNI": Int32(345678901),
         "Dirección": "Calle Secundaria, 111",
-        "Teléfono": 147258369,
+        "Teléfono": Int32(147258369),
         "Email": "lauramartinez456@gmail.com"
     }
 ]);
-
 
 //TODO  CHECK
 use("db_campus_alquiler");
@@ -383,184 +381,184 @@ db.empleado.insertMany([
 ]);
 
 //?Siguiente a configurar
-use("db_campus_alquiler");
-db.createCollection("registro_devolución");
-db.registro_devolución.insertMany([
-    {
-        "ID_Registro": 1,
-        "ID_Alquiler": 123,
-        "ID_Empleado": 1,
-        "Fecha_Devolución": 20230731,
-        "Combustible_Devolución": 50.25,
-        "Kilometraje_Devuelto": 1200.75,
-        "Monto_Adicional": 50
-    },
-    {
-        "ID_Registro": 2,
-        "ID_Alquiler": 456,
-        "ID_Empleado": 2,
-        "Fecha_Devolución": 20230730,
-        "Combustible_Devolución": 40.5,
-        "Kilometraje_Devuelto": 1050.25,
-        "Monto_Adicional": 30
-    },
-    {
-        "ID_Registro": 3,
-        "ID_Alquiler": 789,
-        "ID_Empleado": 3,
-        "Fecha_Devolución": 20230729,
-        "Combustible_Devolución": 60.75,
-        "Kilometraje_Devuelto": 1500,
-        "Monto_Adicional": 20
-    },
-    {
-        "ID_Registro": 4,
-        "ID_Alquiler": 101112,
-        "ID_Empleado": 4,
-        "Fecha_Devolución": 20230728,
-        "Combustible_Devolución": 45,
-        "Kilometraje_Devuelto": 1350.5,
-        "Monto_Adicional": 40
-    },
-    {
-        "ID_Registro": 5,
-        "ID_Alquiler": 131415,
-        "ID_Empleado": 5,
-        "Fecha_Devolución": 20230727,
-        "Combustible_Devolución": 55.5,
-        "Kilometraje_Devuelto": 1400.75,
-        "Monto_Adicional": 25
-    }
-]);
+// use("db_campus_alquiler");
+// db.createCollection("registro_devolución");
+// db.registro_devolución.in sertMany([
+//     {
+//         "ID_Registro": 1,
+//         "ID_Alquiler": 123,
+//         "ID_Empleado": 1,
+//         "Fecha_Devolución": 20230731,
+//         "Combustible_Devolución": 50.25,
+//         "Kilometraje_Devuelto": 1200.75,
+//         "Monto_Adicional": 50
+//     },
+//     {
+//         "ID_Registro": 2,
+//         "ID_Alquiler": 456,
+//         "ID_Empleado": 2,
+//         "Fecha_Devolución": 20230730,
+//         "Combustible_Devolución": 40.5,
+//         "Kilometraje_Devuelto": 1050.25,
+//         "Monto_Adicional": 30
+//     },
+//     {
+//         "ID_Registro": 3,
+//         "ID_Alquiler": 789,
+//         "ID_Empleado": 3,
+//         "Fecha_Devolución": 20230729,
+//         "Combustible_Devolución": 60.75,
+//         "Kilometraje_Devuelto": 1500,
+//         "Monto_Adicional": 20
+//     },
+//     {
+//         "ID_Registro": 4,
+//         "ID_Alquiler": 101112,
+//         "ID_Empleado": 4,
+//         "Fecha_Devolución": 20230728,
+//         "Combustible_Devolución": 45,
+//         "Kilometraje_Devuelto": 1350.5,
+//         "Monto_Adicional": 40
+//     },
+//     {
+//         "ID_Registro": 5,
+//         "ID_Alquiler": 131415,
+//         "ID_Empleado": 5,
+//         "Fecha_Devolución": 20230727,
+//         "Combustible_Devolución": 55.5,
+//         "Kilometraje_Devuelto": 1400.75,
+//         "Monto_Adicional": 25
+//     }
+// ]);
 
-use("db_campus_alquiler");
-db.createCollection("registro_entrega");
-db.registro_entrega.insertMany([
-    {
-        "ID_Registro": 1,
-        "ID_Alquiler": 1,
-        "ID_Empleado": 1,
-        "Fecha_Entregado": 20230731,
-        "Combustible_Entregado": 50.25,
-        "Kilometraje_Entregado": 1200.75
-    },
-    {
-        "ID_Registro": 2,
-        "ID_Alquiler": 2,
-        "ID_Empleado": 2,
-        "Fecha_Entregado": 20230730,
-        "Combustible_Entregado": 40.5,
-        "Kilometraje_Entregado": 1050.25
-    },
-    {
-        "ID_Registro": 3,
-        "ID_Alquiler": 3,
-        "ID_Empleado": 3,
-        "Fecha_Entregado": 20230729,
-        "Combustible_Entregado": 60.75,
-        "Kilometraje_Entregado": 1500
-    },
-    {
-        "ID_Registro": 4,
-        "ID_Alquiler": 4,
-        "ID_Empleado": 4,
-        "Fecha_Entregado": 20230728,
-        "Combustible_Entregado": 45,
-        "Kilometraje_Entregado": 1350.5
-    }
-]);
+// use("db_campus_alquiler");
+// db.createCollection("registro_entrega");
+// db.registro_entrega.insertMany([
+//     {
+//         "ID_Registro": 1,
+//         "ID_Alquiler": 1,
+//         "ID_Empleado": 1,
+//         "Fecha_Entregado": 20230731,
+//         "Combustible_Entregado": 50.25,
+//         "Kilometraje_Entregado": 1200.75
+//     },
+//     {
+//         "ID_Registro": 2,
+//         "ID_Alquiler": 2,
+//         "ID_Empleado": 2,
+//         "Fecha_Entregado": 20230730,
+//         "Combustible_Entregado": 40.5,
+//         "Kilometraje_Entregado": 1050.25
+//     },
+//     {
+//         "ID_Registro": 3,
+//         "ID_Alquiler": 3,
+//         "ID_Empleado": 3,
+//         "Fecha_Entregado": 20230729,
+//         "Combustible_Entregado": 60.75,
+//         "Kilometraje_Entregado": 1500
+//     },
+//     {
+//         "ID_Registro": 4,
+//         "ID_Alquiler": 4,
+//         "ID_Empleado": 4,
+//         "Fecha_Entregado": 20230728,
+//         "Combustible_Entregado": 45,
+//         "Kilometraje_Entregado": 1350.5
+//     }
+// ]);
 
-use("reserva");
-db.createCollection("automovil");
-db.reserva.insertMany([
-    {
-        "ID_Reserva": 1,
-        "ID_Cliente": 1,
-        "ID_Automovil": 1,
-        "Fecha_Reserva": 20230601,
-        "Fecha_Inicio": 20230701,
-        "Fecha_Fin": 20230731,
-        "Estado": "Con deudas"
-    },
-    {
-        "ID_Reserva": 2,
-        "ID_Cliente": 2,
-        "ID_Automovil": 2,
-        "Fecha_Reserva": 20230515,
-        "Fecha_Inicio": 20230801,
-        "Fecha_Fin": 20230815,
-        "Estado": "Disponible"
-    },
-    {
-        "ID_Reserva": 3,
-        "ID_Cliente": 3,
-        "ID_Automovil": 3,
-        "Fecha_Reserva": 20230720,
-        "Fecha_Inicio": 20230901,
-        "Fecha_Fin": 20230930,
-        "Estado": "Disponible"
-    },
-    {
-        "ID_Reserva": 4,
-        "ID_Cliente": 4,
-        "ID_Automovil": 4,
-        "Fecha_Reserva": 20230625,
-        "Fecha_Inicio": 20230715,
-        "Fecha_Fin": 20230725,
-        "Estado": "Con deudas"
-    }
-]);
+// use("reserva");
+// db.createCollection("automovil");
+// db.reserva.insertMany([
+//     {
+//         "ID_Reserva": 1,
+//         "ID_Cliente": 1,
+//         "ID_Automovil": 1,
+//         "Fecha_Reserva": 20230601,
+//         "Fecha_Inicio": 20230701,
+//         "Fecha_Fin": 20230731,
+//         "Estado": "Con deudas"
+//     },
+//     {
+//         "ID_Reserva": 2,
+//         "ID_Cliente": 2,
+//         "ID_Automovil": 2,
+//         "Fecha_Reserva": 20230515,
+//         "Fecha_Inicio": 20230801,
+//         "Fecha_Fin": 20230815,
+//         "Estado": "Disponible"
+//     },
+//     {
+//         "ID_Reserva": 3,
+//         "ID_Cliente": 3,
+//         "ID_Automovil": 3,
+//         "Fecha_Reserva": 20230720,
+//         "Fecha_Inicio": 20230901,
+//         "Fecha_Fin": 20230930,
+//         "Estado": "Disponible"
+//     },
+//     {
+//         "ID_Reserva": 4,
+//         "ID_Cliente": 4,
+//         "ID_Automovil": 4,
+//         "Fecha_Reserva": 20230625,
+//         "Fecha_Inicio": 20230715,
+//         "Fecha_Fin": 20230725,
+//         "Estado": "Con deudas"
+//     }
+// ]);
 
-use("db_campus_alquiler");
-db.createCollection("sucursal");
-db.sucursal.insertMany([
-    {
-        "ID_Sucursal": 1,
-        "Nombre": "Sucursal_1",
-        "Dirección": "Calle 104E",
-        "Teléfono": "137564813"
-    },
-    {
-        "ID_Sucursal": 2,
-        "Nombre": "Sucursal_2",
-        "Dirección": "Avenida Central, 456",
-        "Teléfono": "987654321"
-    },
-    {
-        "ID_Sucursal": 3,
-        "Nombre": "Sucursal_3",
-        "Dirección": "Plaza Mayor, 789",
-        "Teléfono": "321654987"
-    },
-    {
-        "ID_Sucursal": 4,
-        "Nombre": "Sucursal_4",
-        "Dirección": "Calle Secundaria, 111",
-        "Teléfono": "147258369"
-    }
-]);
+// use("db_campus_alquiler");
+// db.createCollection("sucursal");
+// db.sucursal.insertMany([
+//     {
+//         "ID_Sucursal": 1,
+//         "Nombre": "Sucursal_1",
+//         "Dirección": "Calle 104E",
+//         "Teléfono": "137564813"
+//     },
+//     {
+//         "ID_Sucursal": 2,
+//         "Nombre": "Sucursal_2",
+//         "Dirección": "Avenida Central, 456",
+//         "Teléfono": "987654321"
+//     },
+//     {
+//         "ID_Sucursal": 3,
+//         "Nombre": "Sucursal_3",
+//         "Dirección": "Plaza Mayor, 789",
+//         "Teléfono": "321654987"
+//     },
+//     {
+//         "ID_Sucursal": 4,
+//         "Nombre": "Sucursal_4",
+//         "Dirección": "Calle Secundaria, 111",
+//         "Teléfono": "147258369"
+//     }
+// ]);
 
-use("db_campus_alquiler");
-db.createCollection("sucursal_automovil");
-db.sucursal_automovil.insertMany([
-    {
-        "ID_Sucursal": 1,
-        "ID_Automovil": 1,
-        "Cantidad_Disponible": 777
-    },
-    {
-        "ID_Sucursal": 2,
-        "ID_Automovil": 2,
-        "Cantidad_Disponible": 500
-    },
-    {
-        "ID_Sucursal": 3,
-        "ID_Automovil": 3,
-        "Cantidad_Disponible": 300
-    },
-    {
-        "ID_Sucursal": 4,
-        "ID_Automovil": 4,
-        "Cantidad_Disponible": 100
-    }
-]);
+// use("db_campus_alquiler");
+// db.createCollection("sucursal_automovil");
+// db.sucursal_automovil.insertMany([
+//     {
+//         "ID_Sucursal": 1,
+//         "ID_Automovil": 1,
+//         "Cantidad_Disponible": 777
+//     },
+//     {
+//         "ID_Sucursal": 2,
+//         "ID_Automovil": 2,
+//         "Cantidad_Disponible": 500
+//     },
+//     {
+//         "ID_Sucursal": 3,
+//         "ID_Automovil": 3,
+//         "Cantidad_Disponible": 300
+//     },
+//     {
+//         "ID_Sucursal": 4,
+//         "ID_Automovil": 4,
+//         "Cantidad_Disponible": 100
+//     }
+// ]);

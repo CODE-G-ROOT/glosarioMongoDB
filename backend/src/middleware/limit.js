@@ -6,7 +6,7 @@ export let confiGET = () => rateLimit({
     standardHeaders : true,
     legacyHeaders : false,
     skip: (req, res) =>{
-        if(req.headers['contenct-lenght']>91) {
+        if(req.headers['content-length']>91) {
             res.status(413).send({
                 status : 413,
                 message : "Tamaño exedido"
@@ -17,7 +17,7 @@ export let confiGET = () => rateLimit({
     message: (req, res)=>{
         res.status(429).send({
             status: 429,
-            message: "Piala"
+            message: "Paila"
         })
     }
 });
