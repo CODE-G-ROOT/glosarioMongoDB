@@ -17,7 +17,7 @@ export let confiGET = () => rateLimit({
     message: (req, res)=>{
         res.status(429).send({
             status: 429,
-            message: "Paila"
+            message: "EY BOT! Relaxing men"
         })
     }
 });
