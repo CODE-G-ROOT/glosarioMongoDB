@@ -48,6 +48,7 @@ db.createCollection("alquiler", {
       },
     },
   },
+  validationLevel : "strict",
   validationAction: "error"
 });
 db.alquiler.insertMany([
