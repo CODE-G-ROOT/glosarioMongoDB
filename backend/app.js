@@ -7,8 +7,12 @@ dotenv.config();
 
 const app = express();
 
-app.get("/all", alquiler);
-app.get("/all/:id", alquiler);
+//Alquiler
+app.get("/alquiler", alquiler);
+app.get("/alquiler/search/:id", alquiler);
+app.get("/alquiler/automoviles", alquiler);
+
+
 
 // app.post("/campus", appCampus);
 
