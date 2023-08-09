@@ -10,7 +10,7 @@ const app = express();
 //Alquiler
 app.get("/alquiler", alquiler);
 app.get("/alquiler/search/:id", alquiler);
-app.get("/alquiler/automoviles", alquiler);
+app.get("/alquiler/status:active", alquiler);
 
 
 
@@ -19,6 +19,6 @@ app.get("/alquiler/automoviles", alquiler);
 const server_config = JSON.parse(process.env.SERVER_CONFIG);
 app.listen( server_config, ()=>{
     console.log(
-        `http://${server_config.hostname}:${server_config.port}/campus`
+        `http://${server_config.hostname}:${server_config.port}/`
     )
 })

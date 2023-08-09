@@ -376,7 +376,7 @@ db.empleado.insertMany([
     "DNI": "65432109E",
     "Dirección": "Avenida Principal, 987",
     "Telefono": "444555666",
-    "Cargo": "Operador"
+    "Cargo": "Vendedor"
   }
 ]);
 
@@ -628,7 +628,7 @@ db.reserva.insertMany([
     "Fecha_Reserva": ISODate("2023-06-01T00:00:00Z"),
     "Fecha_Inicio": ISODate("2023-07-01T00:00:00Z"),
     "Fecha_Fin": ISODate("2023-07-31T00:00:00Z"),
-    "Estado": "Con deudas"
+    "Estado": "Pendiente"
   },
   {
     "ID_Reserva": 2,
@@ -655,7 +655,7 @@ db.reserva.insertMany([
     "Fecha_Reserva": ISODate("2023-06-25T00:00:00Z"),
     "Fecha_Inicio": ISODate("2023-07-15T00:00:00Z"),
     "Fecha_Fin": ISODate("2023-07-25T00:00:00Z"),
-    "Estado": "Con deudas"
+    "Estado": "Pendiente"
   }
 ]);
 

@@ -165,7 +165,7 @@ db.reserva.aggregate([
     $unwind: "$automovil",
   },
   {
-    $match: { Estado: "pendiente" }
+    $match: { Estado: "Pendiente" }
   },
   {
     $group: {
@@ -195,7 +195,7 @@ db.reserva.aggregate([
 
 ]);
 
-//TODO      Listar todos los alquileres activos junto con los datos de los clientes relacionados.
+//? Check     Listar todos los alquileres activos junto con los datos de los clientes relacionados.
 use("db_campus_alquiler");
 db.alquiler.aggregate([
   {
@@ -301,6 +301,7 @@ use("db_campus_alquiler");
 db.empleado.find({ Cargo: "Vendedor" });
 
 //TODO      Mostrar la cantidad total de automóviles disponibles en cada sucursal.
+//! Pendiente por qué no he pensado como hacerlo
 use("db_campus_alquiler");
 db.sucursal.aggregate([
   {
@@ -351,6 +352,7 @@ db.sucursal.aggregate([
 ]);
 
 //TODO      Obtener el costo total de un alquiler específico.
+//! Pendiente 
 use("db_campus_alquiler");
 db.alquiler.aggregate([
   {
@@ -439,6 +441,7 @@ db.alquiler.aggregate([
 ]);
 
 //TODO      Listar los clientes con el DNI específico.
+//! Corregir, esto debe de ser un find y debe buscar por el DNI
 use("db_campus_alquiler");
 db.cliente.aggregate([
   {
@@ -464,7 +467,7 @@ db.cliente.aggregate([
   },
 ]).toArray();
 
-//TODO      Mostrar todos los automóviles con una capacidad mayor a 5 personas
+//TODO      Mostrar todos los automóviles con una capacidad mayor a 4 personas
 use("db_campus_alquiler");
 db.automovil.find({
   Capacidad: {
@@ -473,6 +476,7 @@ db.automovil.find({
 })
 
 //TODO      Obtener los detalles del alquiler que tiene fecha de inicio en '2023-07-05'.
+//! Corregir la db dado que ninguno empieza con esa fecha
 use("db_campus_alquiler");
 db.alquiler.find({
   Fecha_Inicio: {
@@ -496,6 +500,7 @@ db.empleado.find(
 );
 
 //TODO     Obtener los datos de los clientes que realizaron al menos un alquiler
+//!Toca validar el campo alquiler, si este está vacío, no retornar el cliente
 use("db_campus_alquiler");
 db.cliente.aggregate([
   {
@@ -551,33 +556,32 @@ db.cliente.aggregate([
 ]).toArray();
 
 //TODO     Listar todos los automóviles ordenados por marca y modelo
+//! corrrgir: La query está mal hecha
 use("db_campus_alquiler");
-db.automovil.find({
-  $and: [
-    { Marca: "Honda" },
-    { Modelo: "Civic" },
-  ]
-});
+db.automovil.find({},{sort : {
+  Modelo : 1,
+  Marca : 1
+}});
 
 //TODO     Mostrar la cantidad total de automóviles en cada sucursal junto con su dirección.
 use("db_campus_alquiler");
-db.sucursal.aggregate([
+db.sucursal_automovil.aggregate([
   {
     $lookup: {
-      from: "sucursal_automovil",
+      from: "sucursal",
       localField: "ID_Sucursal",
       foreignField: "ID_Sucursal",
-      as: "sucursal_automovil"
+      as: "sucursal"
     }
   },
   {
-    $unwind: "$sucursal_automovil",
+    $unwind: "$sucursal",
   },
   {
     $lookup: {
       from: "automovil",
       localField: "ID_Automovil",
-      foreignField: "sucursal_automovil.ID_Automovil",
+      foreignField: "ID_Automovil",
       as: "automovil"
     }
   },
@@ -586,21 +590,19 @@ db.sucursal.aggregate([
   },
   {
     $group: {
-      _id: "ID_Sucursal",
-      Nombre: { $first: "$Nombre" },
-      Dirección: { $first: "$Dirección" },
-      Teléfono: { $first: "$Teléfono" },
-      sucursal_automovil: { $addToSet: "$sucursal_automovil" },
+      _id : "$ID_Sucursal",
+      ID_Automovil : { $first : "$ID_Automovil" },
+      Cantidad_Disponible : { $first : "$Cantidad_Disponible" },
+      sucursal: { $addToSet: "$sucursal" },
       automovil: { $addToSet: "$automovil" },
     }
   },
   {
     $project: {
-      Nombre: "$Nombre",
-      Dirección: "$Dirección",
-      Teléfono: "$Teléfono",
-      sucursal_automovil: "$sucursal_automovil",
-      automovil: "$automovil",
+      ID_Automovil : 1,
+      Cantidad_Disponible : 1,
+      sucursal : 1,
+      automovil : 1,
     }
   },
   {
