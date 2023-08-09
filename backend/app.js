@@ -1,13 +1,14 @@
 import dotenv from 'dotenv';
 import express, { application } from 'express';
-import appCampus from './routers/alquiler.js';
+import alquiler from './routers/alquiler.js';
 
 console.clear();
 dotenv.config();
 
 const app = express();
 
-app.get("/", appCampus);
+app.get("/all", alquiler);
+app.get("/all/:id", alquiler);
 
 // app.post("/campus", appCampus);
 

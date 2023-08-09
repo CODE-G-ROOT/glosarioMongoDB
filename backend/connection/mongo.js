@@ -1,7 +1,6 @@
 import { MongoClient } from 'mongodb';
 
 const uri = 'mongodb+srv://JuanDev856:juan856@juandev856.ikw3dq6.mongodb.net/';
-console.log(uri);
 
 let conn = undefined;
 const connectString = uri;
