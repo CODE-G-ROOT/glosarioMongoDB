@@ -9,8 +9,7 @@ const app = express();
 
 //Alquiler
 app.get("/alquiler", alquiler);
-app.get("/alquiler/?search=:id", alquiler);
-app.get("/alquiler/search/estado=:sts", alquiler);
+
 
 
 

@@ -19,7 +19,7 @@ alquiler.get("/alquiler", confiGET(), async (req, res) => {
 
 //? CHECK
 //Obtener el costo total de un alquiler específico.
-alquiler.get("/alquiler/?search:id", confiGET(), async (req, res) => {
+alquiler.get("/?search=:id", confiGET(), async (req, res) => {
   try {
     let collection = await db.collection("alquiler");
     let query = {
@@ -42,7 +42,7 @@ alquiler.get("/alquiler/?search:id", confiGET(), async (req, res) => {
 //Listar todos los alquileres activos junto con los datos de los clientes relacionados.
 //! preguntarle a miguel, por qué no sirve si el endpoint es: /alquiler/search/?estado=:sts
 //! Sirve pero la url pero toma la dirección del primer endpoint /alquiler/?search_estado=:sts
-alquiler.get("/alquiler/search/estado=:sts", confiGET(), async (req, res) => {
+alquiler.get("/?search-estado=:sts", confiGET(), async (req, res) => {
   try {
     let collection = await db.collection("alquiler");
     let query = {
@@ -181,8 +181,30 @@ alquiler.get("/alquiler/search/estado=:sts", confiGET(), async (req, res) => {
 //   res.send(results).status(200)
 // });
 
-// alquiler.get("/alquileres?fecha_inicio=:fecha_inicio&fecha_fin=:fecha_fin")
+//Listar los alquileres con fecha de inicio entre '2023-08-01' y '2023-09-30'.
+alquiler.get("/?search-fechas",  confiGET(), async(req,res)=>{
+  try {
+    
+    let collection = await db.collection('alquiler');
+    const inicio = new Date("2023-08-01T00:00:00Z")
+    const fin = new Date("2023-09-30T00:00:00Z")
 
+    if((inicio = '') || (fin = '')) res.status(404).send("Query Not Found")
 
+    let results = await collection.find({
+      Fecha_Inicio: {
+        $gte: inicio
+      },
+      Fecha_Fin : {
+        $lte: fin
+      }
+    });
+
+    res.status(200).send(results);
+  } catch (error) {
+    console.error(error);
+    res.send(204)
+  }
+})
 
 export default alquiler;

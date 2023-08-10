@@ -492,10 +492,10 @@ db.automovil.find({
 //TODO      Obtener los detalles del alquiler que tiene fecha de inicio en '2023-07-05'.
 //! Corregir la db dado que ninguno empieza con esa fecha
 use("db_campus_alquiler");
+const Fecha_Inicio = new Date ("2023-08-01T00:00:00Z")
 db.alquiler.find({
-  Fecha_Inicio: {
-    $eq: 20230701 //? Toca arregar los inserts direcctamente, no por un update dado que la fecha debe de ser diferente
-  }
+  Fecha_Inicio: { $gte: Fecha_Inicio }
+    //? Toca arregar los inserts direcctamente, no por un update dado que la fecha debe de ser diferente
 });
 
 //TODO      Listar las reservas pendientes realizadas por un cliente específico
@@ -651,10 +651,26 @@ db.automovil.find({ Capacidad: 4 });
 //TODO     Listar los alquileres con fecha de inicio entre '2023-07-05' y '2023-07-10'.
 //! CORREGIR LA DATA YA QUE NO HAY FECHAS QUE INICIEN EN '2023-07-05' Y TERMINEN EN '2023-07-10'
 use("db_campus_alquiler");
+const inicio = new Date("2023-08-01T00:00:00Z")
+const fin = new Date("2023-09-30T00:00:00Z")
 db.alquiler.find({
   Fecha_Inicio: {
-    $gte: 20230701,
-    $lte: 20230815,
+    $gte: inicio //? Toca arregar los inserts direcctamente, no por un update dado que la fecha debe de ser diferente
+  },
+  Fecha_Fin : {
+    $lte: fin
   }
 });
 
+use("db_campus_alquiler");
+db.alquiler.find({
+  Fecha_Fin: {
+    $dateToString: {
+      date: "$Fecha_Fin",
+      format: "%Y-%m-%dT%H:%M:%SZ"
+    }
+  }
+});
+
+use("db_campus_alquiler");
+db.alquiler.find({});
