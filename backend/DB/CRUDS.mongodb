@@ -81,56 +81,57 @@ db.automovil.aggregate([
         ID_Cliente: 1,
         Fecha_Reserva: {
           $dateToString: {
-            date: { $arrayElemAt: 
-              ["$reserva.Fecha_Fin", 0] 
+            date: {
+              $arrayElemAt:
+                ["$reserva.Fecha_Fin", 0]
             },
             format: "%Y-%m-%dT%H:%M:%SZ"
           }
         },
         Fecha_Inicio: {
-          $dateToString : { //convertidor de fecha a string
+          $dateToString: { //convertidor de fecha a string
             date: { // date es un string
-              $arrayElemAt : [
+              $arrayElemAt: [
                 "$reserva.Fecha_Inicio", //acceso
                 0 //posición a tomar
               ]
             },
-            format : "%Y-%m-%dT%H:%M:%SZ" //formato a tomar para el nuevo string del campo "date"
+            format: "%Y-%m-%dT%H:%M:%SZ" //formato a tomar para el nuevo string del campo "date"
           }
         },
         Fecha_Fin: {
-          $dateToString : {
-            date : {
-              $arrayElemAt : [
+          $dateToString: {
+            date: {
+              $arrayElemAt: [
                 "$reserva.Fecha_Inicio",
                 0
               ]
             },
-            format : "%Y-%m-%dT%H:%M:%SZ"
+            format: "%Y-%m-%dT%H:%M:%SZ"
           }
         },
         Estado: 1,
       },
       alquiler: {
-        ID_Alquiler : 1,
-        ID_Cliente : 1,
-        Fecha_Inicio : {
+        ID_Alquiler: 1,
+        ID_Cliente: 1,
+        Fecha_Inicio: {
           $dateToString: {
-            date: { 
-              $arrayElemAt: ["$alquiler.Fecha_Inicio", 0] 
+            date: {
+              $arrayElemAt: ["$alquiler.Fecha_Inicio", 0]
             },
             format: "%Y-%m-%dT%H:%M:%SZ"
           }
         },
-        Fecha_Fin : {
+        Fecha_Fin: {
           $dateToString: {
-            date: { 
-              $arrayElemAt: ["$alquiler.Fecha_Fin", 0] 
+            date: {
+              $arrayElemAt: ["$alquiler.Fecha_Fin", 0]
             },
             format: "%Y-%m-%dT%H:%M:%SZ"
           }
         },
-        Estado : 1,
+        Estado: 1,
       }
     },
   },
@@ -301,7 +302,7 @@ use("db_campus_alquiler");
 db.empleado.find({ Cargo: "Vendedor" });
 
 //TODO      Mostrar la cantidad total de automóviles disponibles en cada sucursal.
-//! Pendiente por qué no he pensado como hacerlo
+//? CHECK
 use("db_campus_alquiler");
 db.sucursal.aggregate([
   {
@@ -342,9 +343,13 @@ db.sucursal.aggregate([
       Nombre: 1,
       Dirección: 1,
       Teléfono: 1,
-      sucursal_automovil: 1,
-      automovil: 1,
-    }
+      sucursal_automovil: {
+        ID_Sucursal: 1,
+        ID_Automovil: "automovil"
+      },
+      Cantidad_Disponible: 1,
+    },
+
   },
   {
     $sort: { _id: 1 }
@@ -352,7 +357,9 @@ db.sucursal.aggregate([
 ]);
 
 //TODO      Obtener el costo total de un alquiler específico.
-//! Pendiente 
+//* Queda pendiente configurar los inserts y agregar el campo de costo_total
+//* Sin embargo lo que estaría bien hecho sería agregar el campo y que por medio de un calculo de fechas y valor del dia según el auto, saque el valor del costo total,
+//* Más sin embargo se hará de esta forma por ser prácticos
 use("db_campus_alquiler");
 db.alquiler.aggregate([
   {
@@ -411,27 +418,57 @@ db.alquiler.aggregate([
       automovil: { $addToSet: "$automovil" },
       cliente: { $addToSet: "$cliente" },
       empleado: { $addToSet: "$empleado" },
+      // Costo_Total: { $first: "$Costo_Total" }
     },
   },
   {
     $project: {
       ID_Cliente: 1,
       ID_Automovil: 1,
-      Fecha_Inicio: 1,
-      Fecha_Fin: 1,
+      Fecha_Inicio: {
+        $dateToString: {
+          date: "$Fecha_Fin",
+          format: "%Y-%m-%dT%H:%M:%SZ"
+        }
+      },
+      Fecha_Fin: {
+        $dateToString: {
+          date: "$Fecha_Fin",
+          format: "%Y-%m-%dT%H:%M:%SZ"
+        }
+      },
       Teléfono: 1,
       Estado: 1,
-      automovil: 1,
-      cliente: 1,
+      automovil: {
+        // _id : "$ID_Automovil",
+        ID_Automovil: 1,
+        Modelo :1 ,
+        Año :1 ,
+        Tipo :1 ,
+        Capacidad :1 ,
+        Precio_Diario :1 ,
+      },
+      cliente: {
+        // _id :"$ID_Cliente",
+        ID_Cliente :1,
+        Nombre : 1,
+        Apellido : 1,
+        DNI : 1,
+        Dirección : 1,
+        Teléfono : 1,
+        Email : 1,
+      },
       empleado: {
-        _id: 1,
+        // _id: "$ID_Empleado",
         ID_Empleado: 1,
         Nombre: 1,
         Apellido: 1,
         Telefono: 1,
         Cargo: 1,
       },
+      // Costo_Total: 1
     },
+
   },
   {
     $sort: {
@@ -441,31 +478,8 @@ db.alquiler.aggregate([
 ]);
 
 //TODO      Listar los clientes con el DNI específico.
-//! Corregir, esto debe de ser un find y debe buscar por el DNI
 use("db_campus_alquiler");
-db.cliente.aggregate([
-  {
-    $group: {
-      _id: "$ID_Cliente",
-      Nombre: { $first: "$Nombre" },
-      Apellido: { $first: "$Apellido" },
-      DNI: { $first: "$DNI" },
-      Teléfono: { $first: "$Teléfono" },
-    },
-  },
-  {
-    $project: {
-      ID_Cliente: "$ID_Cliente",
-      Nombre: "$Nombre",
-      Apellido: "$Apellido",
-      DNI: "$DNI",
-      Teléfono: "$Teléfono",
-    },
-  },
-  {
-    $sort: { DNI: 1 },
-  },
-]).toArray();
+db.cliente.find({})
 
 //TODO      Mostrar todos los automóviles con una capacidad mayor a 4 personas
 use("db_campus_alquiler");
@@ -556,12 +570,11 @@ db.cliente.aggregate([
 ]).toArray();
 
 //TODO     Listar todos los automóviles ordenados por marca y modelo
-//! corrrgir: La query está mal hecha
 use("db_campus_alquiler");
-db.automovil.find({},{sort : {
-  Modelo : 1,
-  Marca : 1
-}});
+db.automovil.find({}).sort({
+  Marca: 1,
+  Modelo: 1
+});
 
 //TODO     Mostrar la cantidad total de automóviles en cada sucursal junto con su dirección.
 use("db_campus_alquiler");
@@ -590,19 +603,35 @@ db.sucursal_automovil.aggregate([
   },
   {
     $group: {
-      _id : "$ID_Sucursal",
-      ID_Automovil : { $first : "$ID_Automovil" },
-      Cantidad_Disponible : { $first : "$Cantidad_Disponible" },
+      _id: "$ID_Sucursal",
+      ID_Automovil: { $first: "$ID_Automovil" },
+      Cantidad_Disponible: { $first: "$Cantidad_Disponible" },
       sucursal: { $addToSet: "$sucursal" },
       automovil: { $addToSet: "$automovil" },
     }
   },
   {
     $project: {
-      ID_Automovil : 1,
+      _id: 1,
+      // ID_Sucursal: "$sucursal",
+      // ID_Automovil : "$automovil",
+      sucursal : {
+        ID_Sucursal : 1,
+        Nombre : 1,
+        Dirección : 1,
+        Teléfono : 1,
+      },
+      automovil: {
+        ID_Automovil: 1,
+        Marca : 1,
+        Modelo : 1,
+        Año : 1,
+        Tipo : 1,
+        Capacidad : 1,
+        Precio_Diario : 1,
+      },
       Cantidad_Disponible : 1,
-      sucursal : 1,
-      automovil : 1,
+      
     }
   },
   {

@@ -140,4 +140,9 @@ alquiler.get("/alquiler/status:active", confiGET(), async (req, res) => {
 
 });
 
+//Para realizar la siguiente de alquiler
+// es necesario tener en cuenta la colección de 
+// registro de entrega
+
+
 export default alquiler;
