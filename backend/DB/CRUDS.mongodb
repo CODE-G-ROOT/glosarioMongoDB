@@ -663,14 +663,4 @@ db.alquiler.find({
 });
 
 use("db_campus_alquiler");
-db.alquiler.find({
-  Fecha_Fin: {
-    $dateToString: {
-      date: "$Fecha_Fin",
-      format: "%Y-%m-%dT%H:%M:%SZ"
-    }
-  }
-});
-
-use("db_campus_alquiler");
 db.alquiler.find({});

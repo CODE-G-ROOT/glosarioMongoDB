@@ -181,8 +181,9 @@ alquiler.get("/?search-estado=:sts", confiGET(), async (req, res) => {
 //   res.send(results).status(200)
 // });
 
+//? CHECK
 //Listar los alquileres con fecha de inicio entre '2023-08-01' y '2023-09-30'.
-alquiler.get("/?search-fechas",  confiGET(), async(req,res)=>{
+alquiler.get("/?search-fechas=Punto_21",  confiGET(), async(req,res)=>{
   try {
     
     let collection = await db.collection('alquiler');
@@ -206,5 +207,40 @@ alquiler.get("/?search-fechas",  confiGET(), async(req,res)=>{
     res.send(204)
   }
 })
+
+alquiler.get("/?search-fechas=Punto_12",  confiGET(), async(req,res)=>{
+  try {
+    
+    let collection = await db.collection('alquiler');
+    const fecha = new Date ("2023-08-01T00:00:00Z")
+
+    if(fecha = '') res.status(404).send("Query Not Found")
+
+    let results = await collection.find({
+      Fecha_Inicio: { $gte: Fecha_Inicio }
+    });
+
+    res.status(200).send(results);
+  } catch (error) {
+    console.error(error);
+    res.send(204)
+  }
+})
+
+alquiler.get("/?search-cliente", confiGET(), async(req,res)=>{
+  try {
+    let collection = await db.collection("alquiler");
+    let results = await collection.find({});
+
+    if(results != '') res.send(204).send("Query without conent")
+
+    res.status(200).send(results);
+  } catch (error) {
+    console.log(error);
+    res.status(404).send("Query Not Found or Empty");
+  }
+})
+
+
 
 export default alquiler;
