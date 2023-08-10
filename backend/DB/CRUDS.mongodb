@@ -245,7 +245,7 @@ db.alquiler.aggregate([
   },
   {
     $match: {
-      Estado: "Activo",
+      Estado: "Disponible",
     },
   },
   {
